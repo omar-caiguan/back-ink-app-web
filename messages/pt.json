@@ -1,0 +1,113 @@
+{
+  "HomePage": {
+    "title": "Estúdio de Tatuagem Black Ink",
+    "welcome": "Bem-vindo ao Black Ink",
+    "description": "Experiência de Tatuagem Premium",
+    "mainTitle": "Black",
+    "mainTitleSuffix": "Ink",
+    "subtitle": "Onde a arte encontra a pele. Experimente a melhor arte da tatuagem em um ambiente exclusivo e profissional.",
+    "ctaBooking": "AGENDAR VISITA",
+    "ctaGallery": "VER GALERIA",
+    "scroll": "Rolar"
+  },
+  "Navigation": {
+    "home": "Início",
+    "artists": "Artistas",
+    "services": "Serviços",
+    "gallery": "Galeria",
+    "contact": "Contato",
+    "booking": "Agendar"
+  },
+  "About": {
+    "title": "Nossa Equipe",
+    "heading": "Artistas Mestres",
+    "description": "Nosso estúdio abriga artistas premiados, cada um com um estilo único e décadas de experiência combinada.",
+    "specialties": {
+      "realism": "Realismo e Blackwork",
+      "traditional": "Tradicional e Colorido",
+      "neotraditional": "Neotradicional"
+    }
+  },
+  "Services": {
+    "title": "Nossa Arte",
+    "heading": "Serviços e Preços",
+    "book": "Agendar Serviço",
+    "items": {
+      "custom": {
+        "title": "Design Personalizado",
+        "price": "A partir de $150",
+        "description": "Arte única adaptada especificamente à sua visão e anatomia."
+      },
+      "coverup": {
+        "title": "Cobertura",
+        "price": "Taxa por hora",
+        "description": "Transformação especializada de tatuagens antigas ou indesejadas em novas obras-primas."
+      },
+      "realism": {
+        "title": "Realismo",
+        "price": "Taxa por hora",
+        "description": "Retratos de alta fidelidade e imagens realistas com detalhes incríveis."
+      },
+      "consultation": {
+        "title": "Consulta",
+        "price": "Grátis",
+        "description": "Sessão de 30 minutos para discutir suas ideias, local e preços."
+      }
+    }
+  },
+  "Portfolio": {
+    "title": "Obras-Primas",
+    "heading": "Trabalhos Selecionados"
+  },
+  "Contact": {
+    "title": "Entre em Contato",
+    "heading": "Comece Seu Projeto",
+    "steps": {
+      "1": "Detalhes",
+      "2": "Ideia",
+      "3": "Artista",
+      "4": "Resumo"
+    },
+    "form": {
+      "next": "Próximo",
+      "back": "Voltar",
+      "submit": "Enviar Solicitação",
+      "personal": {
+        "title": "Conte-nos sobre você",
+        "name": "Nome Completo",
+        "email": "Endereço de E-mail",
+        "phone": "Número de Telefone"
+      },
+      "idea": {
+        "title": "Descreva sua visão",
+        "serviceType": "Tipo de Serviço",
+        "placement": "Local do Corpo",
+        "size": "Tamanho Aproximado",
+        "description": "Descrição Detalhada"
+      },
+      "preferences": {
+        "title": "Artista e Disponibilidade",
+        "artist": "Artista Preferido",
+        "anyArtist": "Qualquer Artista (Primeiro Disponível)",
+        "budget": "Faixa de Orçamento"
+      },
+      "review": {
+        "title": "Revise sua solicitação",
+        "summaryText": "Por favor, verifique seus dados antes de enviar."
+      }
+    }
+  },
+  "Footer": {
+    "description": "Estúdio de tatuagem premium oferecendo arte excepcional e uma experiência única. Seu corpo é nossa tela.",
+    "quickLinks": "LINKS RÁPIDOS",
+    "contact": "CONTATO",
+    "hours": "HORÁRIOS",
+    "rights": "Estúdio de Tatuagem Black Ink. Todos os direitos reservados.",
+    "days": {
+      "monFri": "Seg - Sex",
+      "saturday": "Sábado",
+      "sunday": "Domingo",
+      "closed": "Fechado"
+    }
+  }
+}

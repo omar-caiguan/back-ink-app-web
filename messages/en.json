@@ -1,0 +1,113 @@
+{
+  "HomePage": {
+    "title": "Black Ink Tattoo Studio",
+    "welcome": "Welcome to Black Ink",
+    "description": "Premium Tattoo Experience",
+    "mainTitle": "Black",
+    "mainTitleSuffix": "Ink",
+    "subtitle": "Where art meets skin. Experience the finest tattoo artistry in an exclusive, professional environment.",
+    "ctaBooking": "BOOK APPOINTMENT",
+    "ctaGallery": "VIEW GALLERY",
+    "scroll": "Scroll"
+  },
+  "Navigation": {
+    "home": "Home",
+    "artists": "Artists",
+    "services": "Services",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "booking": "Book Now"
+  },
+  "About": {
+    "title": "Our Team",
+    "heading": "Master Artists",
+    "description": "Our studio is home to award-winning artists, each with a unique style and decades of combined experience.",
+    "specialties": {
+      "realism": "Realism & Blackwork",
+      "traditional": "Traditional & Color",
+      "neotraditional": "Neotraditional"
+    }
+  },
+  "Services": {
+    "title": "Our Craft",
+    "heading": "Services & Pricing",
+    "book": "Book Service",
+    "items": {
+      "custom": {
+        "title": "Custom Design",
+        "price": "From $150",
+        "description": "Unique artwork tailored specifically to your vision and anatomy."
+      },
+      "coverup": {
+        "title": "Cover Up",
+        "price": "Hourly Rate",
+        "description": "Expert transformation of old or unwanted tattoos into new masterpieces."
+      },
+      "realism": {
+        "title": "Realism",
+        "price": "Hourly Rate",
+        "description": "High-fidelity portraits and realistic imagery with incredible detail."
+      },
+      "consultation": {
+        "title": "Consultation",
+        "price": "Free",
+        "description": "30-minute session to discuss your ideas, placement, and pricing."
+      }
+    }
+  },
+  "Portfolio": {
+    "title": "Masterpieces",
+    "heading": "Selected Works"
+  },
+  "Contact": {
+    "title": "Get In Touch",
+    "heading": "Start Your Project",
+    "steps": {
+      "1": "Details",
+      "2": "Idea",
+      "3": "Artist",
+      "4": "Review"
+    },
+    "form": {
+      "next": "Next Step",
+      "back": "Back",
+      "submit": "Submit Request",
+      "personal": {
+        "title": "Tell us about yourself",
+        "name": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number"
+      },
+      "idea": {
+        "title": "Describe your vision",
+        "serviceType": "Service Type",
+        "placement": "Body Placement",
+        "size": "Approximate Size",
+        "description": "Detailed Description"
+      },
+      "preferences": {
+        "title": "Artist & Availability",
+        "artist": "Preferred Artist",
+        "anyArtist": "Any Artist (First Available)",
+        "budget": "Budget Range"
+      },
+      "review": {
+        "title": "Review your request",
+        "summaryText": "Please verify your details before submitting."
+      }
+    }
+  },
+  "Footer": {
+    "description": "Premium tattoo studio delivering exceptional artistry and a unique experience. Your body is our canvas.",
+    "quickLinks": "QUICK LINKS",
+    "contact": "CONTACT",
+    "hours": "OPENING HOURS",
+    "rights": "Black Ink Tattoo Studio. All rights reserved.",
+    "days": {
+      "monFri": "Mon - Fri",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "closed": "Closed"
+    }
+  }
+}

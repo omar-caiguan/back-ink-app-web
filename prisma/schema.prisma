@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  ARTIST
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  phone     String?
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments Appointment[]
+  artist       Artist? // Relation if user is an artist
+}
+
+model Artist {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  slug        String   @unique
+  specialties String[]
+  bio         String?
+  image       String? 
+  
+  appointments Appointment[]
+  schedules    Schedule[]
+  portfolio    PortfolioItem[]
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal?
+  durationMin Int      @default(60)
+  
+  appointments Appointment[]
+}
+
+model Appointment {
+  id            String            @id @default(uuid())
+  date          DateTime
+  status        AppointmentStatus @default(PENDING)
+  depositPaid   Boolean           @default(false)
+  totalPrice    Decimal?
+  notes         String?
+  
+  userId        String
+  user          User    @relation(fields: [userId], references: [id])
+  
+  artistId      String?
+  artist        Artist? @relation(fields: [artistId], references: [id])
+
+  serviceId     String?
+  service       Service? @relation(fields: [serviceId], references: [id])
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  artistId  String
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  dayOfWeek Int      // 0 = Sunday, 1 = Monday, etc.
+  startTime String   // "10:00"
+  endTime   String   // "18:00"
+  isOff     Boolean  @default(false)
+}
+
+model PortfolioItem {
+  id        String   @id @default(uuid())
+  artistId  String?
+  artist    Artist?  @relation(fields: [artistId], references: [id])
+  title     String
+  imageUrl  String
+  tags      String[]
+  createdAt DateTime @default(now())
+}
