@@ -8,7 +8,7 @@ const MAP_SRC =
 export function Location() {
   return (
     <section
-      id="contact"
+      id="location"
       className="relative overflow-hidden border-t border-b border-white/10 bg-gradient-to-b from-black via-zinc-950 to-black"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,0,0,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.05),transparent_30%)] pointer-events-none" />
