@@ -39,13 +39,16 @@ export function Services() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-zinc-400 text-sm mb-6">{t(`items.${key}.description`)}</p>
-                  <Button
-                    variant="default"
-                    className="w-full bg-white text-black hover:bg-red-600 hover:text-white font-semibold tracking-wide"
-                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className="inline-flex items-center justify-center rounded-md text-sm transition-colors h-10 py-2 px-4 w-full bg-white text-black hover:bg-red-600 hover:text-white font-semibold tracking-wide cursor-pointer"
                   >
                     {t('book')}
-                  </Button>
+                  </a>
                 </CardContent>
               </Card>
             </motion.div>
