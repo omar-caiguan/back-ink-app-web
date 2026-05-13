@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-interface Ember {
+interface Particle {
   x: number;
   y: number;
   size: number;
@@ -13,6 +13,9 @@ interface Ember {
   color: string;
   pulse: number;
   pulseSpeed: number;
+  type: 'ember' | 'spark' | 'ash';
+  life: number;
+  maxLife: number;
 }
 
 export function EmberBackground() {
@@ -26,113 +29,183 @@ export function EmberBackground() {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let embers: Ember[] = [];
+    let particles: Particle[] = [];
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
-    const createEmber = (): Ember => {
-      const colors = [
-        'rgba(255, 60, 0, ',    // rojo intenso
-        'rgba(255, 120, 0, ',   // naranja fuego
-        'rgba(255, 200, 50, ', // dorado brillante
-        'rgba(220, 30, 30, ',  // carmesí
-        'rgba(255, 80, 50, ',  // rojo coral
-      ];
-      const colorBase = colors[Math.floor(Math.random() * colors.length)];
-      return {
-        x: Math.random() * canvas.width,
-        y: canvas.height + Math.random() * 150,
-        size: Math.random() * 4 + 1.5,
-        speedY: Math.random() * -1.8 - 0.5,
-        speedX: (Math.random() - 0.5) * 1.2,
-        opacity: Math.random() * 0.5 + 0.5,
-        fadeSpeed: Math.random() * 0.002 + 0.0005,
-        color: colorBase,
-        pulse: 0,
-        pulseSpeed: Math.random() * 0.08 + 0.03,
-      };
-    };
+    const createParticle = (): Particle => {
+      const rand = Math.random();
+      const x = Math.random() * canvas.width;
+      const y = canvas.height + Math.random() * 200;
 
-    const initEmbers = () => {
-      embers = [];
-      const count = Math.min(180, Math.floor((canvas.width * canvas.height) / 8000));
-      for (let i = 0; i < count; i++) {
-        const ember = createEmber();
-        ember.y = Math.random() * canvas.height;
-        embers.push(ember);
+      if (rand < 0.15) {
+        // Spark - bright, fast, short-lived
+        return {
+          x, y,
+          size: Math.random() * 2 + 1,
+          speedY: Math.random() * -3 - 2,
+          speedX: (Math.random() - 0.5) * 3,
+          opacity: Math.random() * 0.4 + 0.6,
+          fadeSpeed: Math.random() * 0.008 + 0.004,
+          color: 'rgba(255, 30, 30, ',
+          pulse: 0,
+          pulseSpeed: Math.random() * 0.15 + 0.1,
+          type: 'spark',
+          life: 0,
+          maxLife: Math.random() * 60 + 40,
+        };
+      } else if (rand < 0.25) {
+        // Ash - gray, slow, large, drifts
+        return {
+          x, y,
+          size: Math.random() * 3 + 2,
+          speedY: Math.random() * -0.8 - 0.2,
+          speedX: (Math.random() - 0.5) * 1.5,
+          opacity: Math.random() * 0.25 + 0.15,
+          fadeSpeed: Math.random() * 0.001 + 0.0003,
+          color: 'rgba(140, 80, 80, ',
+          pulse: 0,
+          pulseSpeed: Math.random() * 0.03 + 0.01,
+          type: 'ash',
+          life: 0,
+          maxLife: Math.random() * 200 + 150,
+        };
+      } else {
+        // Ember - colored, glowing, main effect
+        const colors = [
+          'rgba(255, 20, 20, ',
+          'rgba(255, 40, 0, ',
+          'rgba(220, 0, 0, ',
+          'rgba(255, 60, 30, ',
+          'rgba(200, 0, 30, ',
+        ];
+        return {
+          x, y,
+          size: Math.random() * 5 + 2,
+          speedY: Math.random() * -2.2 - 0.6,
+          speedX: (Math.random() - 0.5) * 1.5,
+          opacity: Math.random() * 0.4 + 0.5,
+          fadeSpeed: Math.random() * 0.002 + 0.0005,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          pulse: 0,
+          pulseSpeed: Math.random() * 0.08 + 0.04,
+          type: 'ember',
+          life: 0,
+          maxLife: Math.random() * 300 + 200,
+        };
       }
     };
 
-    const drawEmber = (ember: Ember, drawOpacity: number) => {
-      ctx.save();
+    const initParticles = () => {
+      particles = [];
+      const count = Math.min(300, Math.floor((canvas.width * canvas.height) / 5000));
+      for (let i = 0; i < count; i++) {
+        const p = createParticle();
+        p.y = Math.random() * canvas.height;
+        p.life = Math.random() * p.maxLife;
+        particles.push(p);
+      }
+    };
 
-      // Glow externo grande y difuso
-      const outerGradient = ctx.createRadialGradient(
-        ember.x, ember.y, 0,
-        ember.x, ember.y, ember.size * 8
-      );
-      outerGradient.addColorStop(0, ember.color + (drawOpacity * 0.4) + ')');
-      outerGradient.addColorStop(0.3, ember.color + (drawOpacity * 0.15) + ')');
-      outerGradient.addColorStop(1, ember.color + '0)');
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = outerGradient;
-      ctx.beginPath();
-      ctx.arc(ember.x, ember.y, ember.size * 8, 0, Math.PI * 2);
-      ctx.fill();
+    const drawParticle = (p: Particle, drawOpacity: number) => {
+      if (p.type === 'spark') {
+        // Spark: intense white-yellow point with minimal glow
+        ctx.save();
+        ctx.globalAlpha = drawOpacity;
+        ctx.fillStyle = `rgba(255, 80, 80, ${drawOpacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        // Small halo
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
+        grad.addColorStop(0, `rgba(255, 60, 60, ${drawOpacity * 0.3})`);
+        grad.addColorStop(1, 'rgba(255, 60, 60, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      } else if (p.type === 'ash') {
+        // Ash: soft gray drifting particle
+        ctx.save();
+        ctx.globalAlpha = drawOpacity * 0.6;
+        ctx.fillStyle = `rgba(120, 60, 60, ${drawOpacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      } else {
+        // Ember: strong colored glow
+        ctx.save();
 
-      // Glow medio
-      const midGradient = ctx.createRadialGradient(
-        ember.x, ember.y, 0,
-        ember.x, ember.y, ember.size * 3
-      );
-      midGradient.addColorStop(0, ember.color + (drawOpacity * 0.9) + ')');
-      midGradient.addColorStop(1, ember.color + '0)');
-      ctx.fillStyle = midGradient;
-      ctx.beginPath();
-      ctx.arc(ember.x, ember.y, ember.size * 3, 0, Math.PI * 2);
-      ctx.fill();
+        // Massive outer glow
+        const outer = ctx.createRadialGradient(
+          p.x, p.y, 0,
+          p.x, p.y, p.size * 12
+        );
+        outer.addColorStop(0, p.color + (drawOpacity * 0.5) + ')');
+        outer.addColorStop(0.2, p.color + (drawOpacity * 0.2) + ')');
+        outer.addColorStop(1, p.color + '0)');
+        ctx.fillStyle = outer;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 12, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Núcleo brillante blanco-anaranjado
-      ctx.fillStyle = `rgba(255, 240, 200, ${drawOpacity})`;
-      ctx.beginPath();
-      ctx.arc(ember.x, ember.y, ember.size * 0.6, 0, Math.PI * 2);
-      ctx.fill();
+        // Inner glow
+        const inner = ctx.createRadialGradient(
+          p.x, p.y, 0,
+          p.x, p.y, p.size * 4
+        );
+        inner.addColorStop(0, p.color + (drawOpacity * 0.95) + ')');
+        inner.addColorStop(1, p.color + '0)');
+        ctx.fillStyle = inner;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+        ctx.fill();
 
-      ctx.restore();
+        // Hot red core
+        ctx.fillStyle = `rgba(255, 180, 180, ${drawOpacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
     };
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Resplandor de fogata en la base - más intenso
-      const bgGradient = ctx.createRadialGradient(
+      // Strong fire glow at bottom
+      const fireGlow = ctx.createRadialGradient(
         canvas.width * 0.5, canvas.height, 0,
-        canvas.width * 0.5, canvas.height, canvas.width * 0.8
+        canvas.width * 0.5, canvas.height, canvas.width * 0.9
       );
-      bgGradient.addColorStop(0, 'rgba(120, 20, 5, 0.15)');
-      bgGradient.addColorStop(0.4, 'rgba(60, 10, 5, 0.06)');
-      bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = bgGradient;
+      fireGlow.addColorStop(0, 'rgba(140, 25, 5, 0.22)');
+      fireGlow.addColorStop(0.3, 'rgba(80, 12, 5, 0.10)');
+      fireGlow.addColorStop(0.6, 'rgba(30, 5, 5, 0.04)');
+      fireGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = fireGlow;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      embers.forEach((ember) => {
-        ember.y += ember.speedY;
-        ember.x += ember.speedX + Math.sin(ember.y * 0.008) * 0.5;
-        ember.opacity -= ember.fadeSpeed;
-        ember.pulse += ember.pulseSpeed;
+      particles.forEach((p) => {
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.y * 0.006 + p.pulse) * 0.4;
+        p.opacity -= p.fadeSpeed;
+        p.pulse += p.pulseSpeed;
+        p.life++;
 
-        // Parpadeo intenso tipo brasa real
-        const pulseFactor = Math.sin(ember.pulse) * 0.25;
-        const drawOpacity = Math.max(0, Math.min(1, ember.opacity + pulseFactor));
+        const pulseFactor = Math.sin(p.pulse) * (p.type === 'ember' ? 0.3 : 0.15);
+        const lifeRatio = 1 - (p.life / p.maxLife);
+        const drawOpacity = Math.max(0, Math.min(1, (p.opacity + pulseFactor) * lifeRatio));
 
-        if (ember.opacity <= 0 || ember.y < -50) {
-          const newEmber = createEmber();
-          Object.assign(ember, newEmber);
+        if (drawOpacity <= 0 || p.y < -80 || p.life >= p.maxLife) {
+          Object.assign(p, createParticle());
         } else {
-          drawEmber(ember, drawOpacity);
+          drawParticle(p, drawOpacity);
         }
       });
 
@@ -140,12 +213,12 @@ export function EmberBackground() {
     };
 
     resize();
-    initEmbers();
+    initParticles();
     animate();
 
     const handleResize = () => {
       resize();
-      initEmbers();
+      initParticles();
     };
     window.addEventListener('resize', handleResize);
 

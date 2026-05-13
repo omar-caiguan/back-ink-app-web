@@ -11,7 +11,7 @@ export function Services() {
   const t = useTranslations('Services');
 
   return (
-    <section id="services" className="py-24 bg-zinc-950/85">
+    <section id="services" className="py-24 bg-zinc-950/80">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

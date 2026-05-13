@@ -30,7 +30,7 @@ export function About() {
   const t = useTranslations('About');
 
   return (
-    <section id="artists" className="py-24 bg-zinc-900/85">
+    <section id="artists" className="py-24 bg-zinc-900/80">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
