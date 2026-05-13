@@ -8,20 +8,24 @@ import { FAQ } from '@/components/layout/FAQ';
 import { Contact } from '@/components/layout/Contact';
 import { Footer } from '@/components/layout/Footer';
 import { ChatWidget } from '@/components/chat/ChatWidget';
+import { EmberBackground } from '@/components/layout/EmberBackground';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-red-900 selection:text-white">
-      <Navigation />
-      <Hero />
-      <About />
-      <Services />
-      <Portfolio />
-      <Location />
-      <FAQ />
-      <Contact />
-      <Footer />
-      <ChatWidget />
-    </main>
+    <>
+      <EmberBackground />
+      <main className="relative z-10 min-h-screen bg-transparent text-white selection:bg-red-900 selection:text-white">
+        <Navigation />
+        <Hero />
+        <About />
+        <Services />
+        <Portfolio />
+        <Location />
+        <FAQ />
+        <Contact />
+        <Footer />
+        <ChatWidget />
+      </main>
+    </>
   );
 }

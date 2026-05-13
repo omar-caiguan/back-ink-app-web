@@ -41,7 +41,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${oswald.variable} ${playfair.variable} font-sans antialiased bg-zinc-950 text-zinc-50`}
+        className={`${inter.variable} ${oswald.variable} ${playfair.variable} font-sans antialiased bg-black text-zinc-50`}
       >
         <NextIntlClientProvider messages={messages}>
           {children}

@@ -30,7 +30,7 @@ export function About() {
   const t = useTranslations('About');
 
   return (
-    <section id="artists" className="py-24 bg-zinc-900">
+    <section id="artists" className="py-24 bg-zinc-900/85">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -55,7 +55,7 @@ export function About() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.2, duration: 0.6 }}
             >
-              <Card className="bg-zinc-950 border-zinc-800 overflow-hidden group hover:border-red-900/50 transition-colors">
+              <Card className="bg-zinc-950/60 border-zinc-800 overflow-hidden group hover:border-red-900/50 transition-colors">
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <Image
                     src={artist.image}
