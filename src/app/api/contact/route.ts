@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    const { data, error } = await resend.emails.send({
+    let sendResult = await resend.emails.send({
       from: `Black Ink Studio <${FROM_EMAIL}>`,
       to: [CONTACT_EMAIL],
       replyTo: email,
@@ -79,17 +79,65 @@ export async function POST(request: Request) {
       html: htmlContent,
     });
 
-    if (error) {
-      console.error('Resend error:', error);
+    // Fallback to Resend's default domain if the custom domain isn't verified
+    if (sendResult.error && sendResult.error.message?.includes('domain is not verified')) {
+      sendResult = await resend.emails.send({
+        from: 'Black Ink Studio <onboarding@resend.dev>',
+        to: [CONTACT_EMAIL],
+        replyTo: email,
+        subject: `New Booking Request from ${name} - ${serviceType}`,
+        html: htmlContent,
+      });
+    }
+
+    if (sendResult.error) {
       return NextResponse.json(
         { error: 'Failed to send email' },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ success: true, id: data?.id });
-  } catch (err) {
-    console.error('Contact API error:', err);
+    // Send confirmation email to the client (fire-and-forget, shouldn't break the flow)
+    try {
+      const clientHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
+          <div style="background: #dc2626; padding: 24px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">Booking Received - Black Ink</h1>
+          </div>
+          <div style="padding: 32px; background: #fafafa; border: 1px solid #e5e5e5;">
+            <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Hi ${name},</h2>
+            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+              We have received your booking request. Our team will review your details and contact you shortly.
+            </p>
+            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+              Here's a quick summary of what you sent:
+            </p>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Service</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: capitalize;">${serviceType}</td></tr>
+              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Artist</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${artistLabel}</td></tr>
+              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Budget</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${budgetLabel[budget] || budget || 'N/A'}</td></tr>
+            </table>
+            <p style="font-size: 14px; color: #666; margin-top: 24px;">
+              If you have any questions, feel free to reply to this email or contact us directly.
+            </p>
+          </div>
+          <div style="background: #1a1a1a; padding: 16px; text-align: center; color: #999; font-size: 12px;">
+            <p style="margin: 0;">Black Ink Tattoo Studio</p>
+          </div>
+        </div>
+      `;
+      await resend.emails.send({
+        from: `Black Ink Studio <${FROM_EMAIL}>`,
+        to: [email],
+        subject: `Booking Confirmation - Black Ink Studio`,
+        html: clientHtml,
+      });
+    } catch {
+      // Ignore client confirmation errors silently
+    }
+
+    return NextResponse.json({ success: true, id: sendResult.data?.id });
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
