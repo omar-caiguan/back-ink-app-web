@@ -117,7 +117,7 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-24 bg-zinc-950/80 relative overflow-hidden">
+    <section id="contact" className="py-24 bg-black/90 border-t border-white/5 relative overflow-hidden">
         {/* Background Accents */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[100px]" />

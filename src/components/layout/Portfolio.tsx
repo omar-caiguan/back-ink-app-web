@@ -29,7 +29,7 @@ export function Portfolio() {
   const t = useTranslations('Portfolio');
 
   return (
-    <section id="gallery" className="py-24 bg-black/80">
+    <section id="gallery" className="py-24 bg-black/90 border-t border-white/5">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
