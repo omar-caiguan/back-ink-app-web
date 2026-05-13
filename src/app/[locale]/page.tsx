@@ -7,6 +7,7 @@ import { Location } from '@/components/layout/Location';
 import { FAQ } from '@/components/layout/FAQ';
 import { Contact } from '@/components/layout/Contact';
 import { Footer } from '@/components/layout/Footer';
+import { ChatWidget } from '@/components/chat/ChatWidget';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <FAQ />
       <Contact />
       <Footer />
+      <ChatWidget />
     </main>
   );
 }

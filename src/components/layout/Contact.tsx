@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from '@/lib/utils';
-import { Check, ChevronRight, ChevronLeft, Calendar, User, FileText, Image as ImageIcon } from 'lucide-react';
+import { Check, ChevronRight, ChevronLeft, Calendar, User, FileText, Image as ImageIcon, Mail, MessageCircle, Send, Loader2 } from 'lucide-react';
 
 export function Contact() {
   const t = useTranslations('Contact');
@@ -31,7 +32,10 @@ export function Contact() {
     description: '',
     artist: 'any',
     budget: '',
+    contactPreference: 'email',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const totalSteps = 4;
 
@@ -45,6 +49,64 @@ export function Contact() {
 
   const handleSelectChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const generateWhatsAppLink = () => {
+    const budgetLabel: Record<string, string> = {
+      low: '$100 - $300',
+      medium: '$300 - $800',
+      high: '$800+',
+      flexible: 'Flexible',
+    };
+    const artistLabel = formData.artist === 'any' ? 'First Available' : formData.artist;
+    const message = encodeURIComponent(
+      `*New Booking Request - Black Ink Studio*\n\n` +
+      `*Name:* ${formData.name}\n` +
+      `*Email:* ${formData.email}\n` +
+      `*Phone:* ${formData.phone || 'N/A'}\n` +
+      `*Service:* ${formData.serviceType}\n` +
+      `*Placement:* ${formData.placement || 'N/A'}\n` +
+      `*Size:* ${formData.size || 'N/A'}\n` +
+      `*Artist:* ${artistLabel}\n` +
+      `*Budget:* ${budgetLabel[formData.budget] || formData.budget || 'N/A'}\n\n` +
+      `*Description:*\n${formData.description || 'No description provided.'}`
+    );
+    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '1234567890';
+    return `https://wa.me/${phone}?text=${message}`;
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.name || !formData.email || !formData.serviceType) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to send request');
+      }
+
+      setIsSuccess(true);
+      toast.success('Request sent successfully!');
+
+      if (formData.contactPreference === 'whatsapp' || formData.contactPreference === 'both') {
+        const waLink = generateWhatsAppLink();
+        window.open(waLink, '_blank');
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const steps = [
@@ -292,6 +354,49 @@ export function Contact() {
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        <div className="space-y-3">
+                            <Label className="text-zinc-300 text-lg">{t('form.preferences.contactMethod')}</Label>
+                            <RadioGroup
+                                defaultValue={formData.contactPreference}
+                                onValueChange={(val) => handleSelectChange('contactPreference', val)}
+                                className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                            >
+                                <div className="relative">
+                                    <RadioGroupItem value="email" id="c1" className="peer sr-only" />
+                                    <Label
+                                        htmlFor="c1"
+                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
+                                    >
+                                        <Mail className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
+                                        <span className="text-white font-bold">{t('form.preferences.email')}</span>
+                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.emailDesc')}</span>
+                                    </Label>
+                                </div>
+                                <div className="relative">
+                                    <RadioGroupItem value="whatsapp" id="c2" className="peer sr-only" />
+                                    <Label
+                                        htmlFor="c2"
+                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
+                                    >
+                                        <MessageCircle className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
+                                        <span className="text-white font-bold">{t('form.preferences.whatsapp')}</span>
+                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.whatsappDesc')}</span>
+                                    </Label>
+                                </div>
+                                <div className="relative">
+                                    <RadioGroupItem value="both" id="c3" className="peer sr-only" />
+                                    <Label
+                                        htmlFor="c3"
+                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
+                                    >
+                                        <Send className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
+                                        <span className="text-white font-bold">{t('form.preferences.both')}</span>
+                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.bothDesc')}</span>
+                                    </Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
                     </div>
                 </motion.div>
             )}
@@ -331,6 +436,10 @@ export function Contact() {
                                 <span className="block text-zinc-500 text-xs uppercase tracking-wider">Budget</span>
                                 <span className="text-white capitalize">{formData.budget || '-'}</span>
                             </div>
+                             <div>
+                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Contact Via</span>
+                                <span className="text-white capitalize">{formData.contactPreference || 'email'}</span>
+                            </div>
                         </div>
                     </div>
                 </motion.div>
@@ -356,12 +465,31 @@ export function Contact() {
                         {t('form.next')}
                         <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>
+                ) : isSuccess ? (
+                    <Button 
+                        disabled
+                        className="bg-zinc-700 text-white min-w-[150px] cursor-default"
+                    >
+                        {t('form.sent')}
+                        <Check className="w-4 h-4 ml-2" />
+                    </Button>
                 ) : (
                     <Button 
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
                         className="bg-green-600 hover:bg-green-700 text-white min-w-[150px]"
                     >
-                        {t('form.submit')}
-                        <Check className="w-4 h-4 ml-2" />
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                {t('form.sending')}
+                            </>
+                        ) : (
+                            <>
+                                {t('form.submit')}
+                                <Check className="w-4 h-4 ml-2" />
+                            </>
+                        )}
                     </Button>
                 )}
             </div>

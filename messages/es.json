@@ -72,6 +72,8 @@
       "next": "Siguiente",
       "back": "Atrás",
       "submit": "Enviar Solicitud",
+      "sending": "Enviando...",
+      "sent": "¡Enviado!",
       "personal": {
         "title": "Cuéntanos sobre ti",
         "name": "Nombre Completo",
@@ -89,7 +91,14 @@
         "title": "Artista y Disponibilidad",
         "artist": "Artista Preferido",
         "anyArtist": "Cualquier Artista (Primer disponible)",
-        "budget": "Rango de Presupuesto"
+        "budget": "Rango de Presupuesto",
+        "contactMethod": "¿Cómo te gustaría ser contactado?",
+        "email": "Correo",
+        "emailDesc": "Recibir confirmación por mail",
+        "whatsapp": "WhatsApp",
+        "whatsappDesc": "Abrir chat con tu formulario",
+        "both": "Ambos",
+        "bothDesc": "Notificación por correo + WhatsApp"
       },
       "review": {
         "title": "Revisa tu solicitud",

@@ -72,6 +72,8 @@
       "next": "Next Step",
       "back": "Back",
       "submit": "Submit Request",
+      "sending": "Sending...",
+      "sent": "Sent!",
       "personal": {
         "title": "Tell us about yourself",
         "name": "Full Name",
@@ -89,7 +91,14 @@
         "title": "Artist & Availability",
         "artist": "Preferred Artist",
         "anyArtist": "Any Artist (First Available)",
-        "budget": "Budget Range"
+        "budget": "Budget Range",
+        "contactMethod": "How would you like to be contacted?",
+        "email": "Email",
+        "emailDesc": "Receive confirmation by mail",
+        "whatsapp": "WhatsApp",
+        "whatsappDesc": "Open chat with your form",
+        "both": "Both",
+        "bothDesc": "Email + WhatsApp notification"
       },
       "review": {
         "title": "Review your request",

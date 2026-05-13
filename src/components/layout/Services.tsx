@@ -39,7 +39,11 @@ export function Services() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-zinc-400 text-sm mb-6">{t(`items.${key}.description`)}</p>
-                  <Button variant="outline" className="w-full border-zinc-700 hover:bg-white hover:text-black">
+                  <Button
+                    variant="default"
+                    className="w-full bg-white text-black hover:bg-red-600 hover:text-white font-semibold tracking-wide"
+                    onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
                     {t('book')}
                   </Button>
                 </CardContent>

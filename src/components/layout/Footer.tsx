@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Instagram, Facebook, Twitter, Mail, MapPin, Phone } from 'lucide-react';
 
 export function Footer() {
@@ -16,8 +17,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="text-2xl font-heading font-bold text-white tracking-widest uppercase">
-              Black<span className="text-red-600">Ink</span>
+            <Link href="/" className="flex items-center gap-3 text-2xl font-heading font-bold text-white tracking-widest uppercase">
+              <Image
+                src="/icon/blackink.PNG"
+                alt="Black Ink"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
+              <span>
+                Black<span className="text-red-600">Ink</span>
+              </span>
             </Link>
             <p className="text-zinc-500 text-sm leading-relaxed">
               {t('description')}
