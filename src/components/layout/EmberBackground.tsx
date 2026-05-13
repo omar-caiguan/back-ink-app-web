@@ -48,7 +48,7 @@ export function EmberBackground() {
           size: Math.random() * 2 + 1,
           speedY: Math.random() * -3 - 2,
           speedX: (Math.random() - 0.5) * 3,
-          opacity: Math.random() * 0.4 + 0.6,
+          opacity: Math.random() * 0.2 + 0.8,
           fadeSpeed: Math.random() * 0.008 + 0.004,
           color: 'rgba(255, 30, 30, ',
           pulse: 0,
@@ -87,7 +87,7 @@ export function EmberBackground() {
           size: Math.random() * 5 + 2,
           speedY: Math.random() * -2.2 - 0.6,
           speedX: (Math.random() - 0.5) * 1.5,
-          opacity: Math.random() * 0.4 + 0.5,
+          opacity: Math.random() * 0.3 + 0.7,
           fadeSpeed: Math.random() * 0.002 + 0.0005,
           color: colors[Math.floor(Math.random() * colors.length)],
           pulse: 0,
@@ -144,14 +144,14 @@ export function EmberBackground() {
         // Massive outer glow
         const outer = ctx.createRadialGradient(
           p.x, p.y, 0,
-          p.x, p.y, p.size * 12
+          p.x, p.y, p.size * 14
         );
         outer.addColorStop(0, p.color + (drawOpacity * 0.5) + ')');
         outer.addColorStop(0.2, p.color + (drawOpacity * 0.2) + ')');
         outer.addColorStop(1, p.color + '0)');
         ctx.fillStyle = outer;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 12, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size * 14, 0, Math.PI * 2);
         ctx.fill();
 
         // Inner glow
@@ -198,7 +198,7 @@ export function EmberBackground() {
         p.pulse += p.pulseSpeed;
         p.life++;
 
-        const pulseFactor = Math.sin(p.pulse) * (p.type === 'ember' ? 0.3 : 0.15);
+        const pulseFactor = Math.sin(p.pulse) * (p.type === 'ember' ? 0.35 : 0.2);
         const lifeRatio = 1 - (p.life / p.maxLife);
         const drawOpacity = Math.max(0, Math.min(1, (p.opacity + pulseFactor) * lifeRatio));
 
