@@ -45,10 +45,10 @@ export function EmberBackground() {
         // Spark - bright, fast, short-lived
         return {
           x, y,
-          size: Math.random() * 2 + 1,
+          size: Math.random() * 2.5 + 1.5,
           speedY: Math.random() * -3 - 2,
           speedX: (Math.random() - 0.5) * 3,
-          opacity: Math.random() * 0.2 + 0.8,
+          opacity: Math.random() * 0.1 + 0.9,
           fadeSpeed: Math.random() * 0.008 + 0.004,
           color: 'rgba(255, 30, 30, ',
           pulse: 0,
@@ -84,10 +84,10 @@ export function EmberBackground() {
         ];
         return {
           x, y,
-          size: Math.random() * 5 + 2,
+          size: Math.random() * 6 + 3,
           speedY: Math.random() * -2.2 - 0.6,
           speedX: (Math.random() - 0.5) * 1.5,
-          opacity: Math.random() * 0.3 + 0.7,
+          opacity: Math.random() * 0.2 + 0.85,
           fadeSpeed: Math.random() * 0.002 + 0.0005,
           color: colors[Math.floor(Math.random() * colors.length)],
           pulse: 0,
@@ -101,7 +101,7 @@ export function EmberBackground() {
 
     const initParticles = () => {
       particles = [];
-      const count = Math.min(300, Math.floor((canvas.width * canvas.height) / 5000));
+      const count = Math.min(350, Math.floor((canvas.width * canvas.height) / 4000));
       for (let i = 0; i < count; i++) {
         const p = createParticle();
         p.y = Math.random() * canvas.height;
@@ -146,8 +146,8 @@ export function EmberBackground() {
           p.x, p.y, 0,
           p.x, p.y, p.size * 14
         );
-        outer.addColorStop(0, p.color + (drawOpacity * 0.5) + ')');
-        outer.addColorStop(0.2, p.color + (drawOpacity * 0.2) + ')');
+        outer.addColorStop(0, p.color + (drawOpacity * 0.7) + ')');
+        outer.addColorStop(0.2, p.color + (drawOpacity * 0.35) + ')');
         outer.addColorStop(1, p.color + '0)');
         ctx.fillStyle = outer;
         ctx.beginPath();
@@ -167,7 +167,7 @@ export function EmberBackground() {
         ctx.fill();
 
         // Hot red core
-        ctx.fillStyle = `rgba(255, 180, 180, ${drawOpacity})`;
+        ctx.fillStyle = `rgba(255, 220, 220, ${drawOpacity})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * 0.7, 0, Math.PI * 2);
         ctx.fill();
