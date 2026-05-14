@@ -1,11 +1,14 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { MapPin, Phone, Mail, Instagram, Facebook, MessageCircle } from 'lucide-react';
 
 const MAP_SRC =
   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.697529458983!2d-70.6482672!3d-33.4372562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a08332155f%3A0xe54d241c6d36e2f6!2sSantiago%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1sen!2scl!4v1715000000000!5m2!1sen!2scl';
 
 export function Location() {
+  const t = useTranslations('Location');
+
   return (
     <section
       id="location"
@@ -17,18 +20,18 @@ export function Location() {
           <div className="space-y-6 bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.8)] backdrop-blur">
             <div className="inline-flex items-center gap-2 rounded-full bg-red-600/10 text-red-300 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em]">
               <MapPin className="h-4 w-4" />
-              Visítanos
+              {t('visitUs')}
             </div>
-            <h3 className="text-2xl sm:text-3xl font-heading font-bold text-white">Black Ink Studio</h3>
+            <h3 className="text-2xl sm:text-3xl font-heading font-bold text-white">{t('studioTitle')}</h3>
             <p className="text-zinc-400 leading-relaxed">
-              Un espacio premium para tatuajes y arte corporal. Agenda una consulta, visita nuestro showroom o contáctanos por tus ideas.
+              {t('studioDescription')}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              <InfoRow icon={<MapPin className="h-4 w-4" />} label="Dirección" value="Santiago, Región Metropolitana" />
-              <InfoRow icon={<Phone className="h-4 w-4" />} label="Teléfono" value="+56 9 3057 9869" href="tel:+56930579869" />
-              <InfoRow icon={<Mail className="h-4 w-4" />} label="Email" value="omar.caiguan@gmail.com" href="mailto:omar.caiguan@gmail.com" />
-              <InfoRow icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp" value="+56 9 3057 9869" href="https://wa.me/56930579869" />
+              <InfoRow icon={<MapPin className="h-4 w-4" />} label={t('address')} value="Santiago, Región Metropolitana" />
+              <InfoRow icon={<Phone className="h-4 w-4" />} label={t('phone')} value="+56 9 3057 9869" href="tel:+56930579869" />
+              <InfoRow icon={<Mail className="h-4 w-4" />} label={t('email')} value="omar.caiguan@gmail.com" href="mailto:omar.caiguan@gmail.com" />
+              <InfoRow icon={<MessageCircle className="h-4 w-4" />} label={t('whatsapp')} value="+56 9 3057 9869" href="https://wa.me/56930579869" />
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2 text-sm text-zinc-300">
@@ -59,14 +62,14 @@ export function Location() {
             </div>
 
             <div className="bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col gap-2 text-sm text-zinc-300">
-              <p className="font-semibold text-white">Horarios</p>
+              <p className="font-semibold text-white">{t('hours')}</p>
               <div className="grid grid-cols-2 gap-2">
-                <span className="text-zinc-400">Lun - Vie</span>
+                <span className="text-zinc-400">{t('monFri')}</span>
                 <span className="text-white text-right">10:00 - 20:00</span>
-                <span className="text-zinc-400">Sábado</span>
+                <span className="text-zinc-400">{t('saturday')}</span>
                 <span className="text-white text-right">11:00 - 18:00</span>
-                <span className="text-zinc-400">Domingo</span>
-                <span className="text-white text-right">Con cita</span>
+                <span className="text-zinc-400">{t('sunday')}</span>
+                <span className="text-white text-right">{t('byAppointment')}</span>
               </div>
             </div>
           </div>
@@ -74,7 +77,7 @@ export function Location() {
           <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_25px_80px_-40px_rgba(0,0,0,0.8)]">
             <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-black/50 pointer-events-none" />
             <iframe
-              title="Ubicación Black Ink"
+              title={t('mapTitle')}
               src={MAP_SRC}
               className="w-full h-[420px] sm:h-[520px] grayscale hover:grayscale-0 transition duration-500"
               style={{ border: 0 }}
@@ -87,8 +90,8 @@ export function Location() {
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-600 text-white font-semibold">BI</span>
                 <div>
-                  <p className="font-semibold">Visita nuestro estudio</p>
-                  <p className="text-xs text-zinc-300">Santiago, Chile</p>
+                  <p className="font-semibold">{t('visitOurStudio')}</p>
+                  <p className="text-xs text-zinc-300">{t('santiagoChile')}</p>
                 </div>
               </div>
               <a
@@ -97,7 +100,7 @@ export function Location() {
                 rel="noreferrer"
                 className="text-xs font-semibold text-red-300 hover:text-white transition"
               >
-                Ver mapa
+                {t('viewMap')}
               </a>
             </div>
           </div>

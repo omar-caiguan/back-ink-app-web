@@ -48,7 +48,7 @@ export function Hero() {
             <Button size="lg" className="bg-red-700 hover:bg-red-800 text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50">
               {t('ctaBooking')}
             </Button>
-            <Button size="lg" variant="outline" className="border-white/40 bg-black/30 hover:bg-black/50 backdrop-blur-sm text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50">
+            <Button size="lg" variant="outline" className="border-white/40 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50">
               {t('ctaGallery')}
             </Button>
           </motion.div>

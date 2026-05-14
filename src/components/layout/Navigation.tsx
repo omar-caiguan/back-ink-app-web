@@ -24,10 +24,18 @@ export function Navigation() {
     { href: '#contact', label: t('contact') },
   ];
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsOpen(false);
+  };
+
   return (
     <header className="fixed top-0 w-full z-50 bg-black/85 backdrop-blur-lg border-b border-white/10">
       <div className="container mx-auto px-4 h-24 md:h-28 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 lg:gap-4 text-xl lg:text-2xl font-heading font-bold text-white tracking-widest uppercase">
+        <button
+          onClick={scrollToTop}
+          className="flex items-center gap-3 lg:gap-4 text-xl lg:text-2xl font-heading font-bold text-white tracking-widest uppercase cursor-pointer"
+        >
           <Image
             src="/icon/blackink.PNG"
             alt="Black Ink"
@@ -39,22 +47,35 @@ export function Navigation() {
           <span className="hidden lg:inline">
             Black<span className="text-red-600">Ink</span>
           </span>
-        </Link>
+        </button>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-6">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium tracking-wide transition-colors hover:text-red-500",
-                pathname === link.href ? "text-red-500" : "text-zinc-400"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) =>
+            link.href === '/' ? (
+              <button
+                key={link.href}
+                onClick={scrollToTop}
+                className={cn(
+                  "text-sm font-medium tracking-wide transition-colors hover:text-red-500 cursor-pointer",
+                  pathname === link.href ? "text-red-500" : "text-zinc-400"
+                )}
+              >
+                {link.label}
+              </button>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "text-sm font-medium tracking-wide transition-colors hover:text-red-500",
+                  pathname === link.href ? "text-red-500" : "text-zinc-400"
+                )}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
           <div className="h-6 w-px bg-white/20 mx-2" />
           <LanguageSwitcher />
           <Button variant="default" className="bg-red-600 hover:bg-red-700 text-white font-medium rounded-md px-6 ml-4">
@@ -84,16 +105,26 @@ export function Navigation() {
             className="lg:hidden bg-black border-b border-white/10"
           >
             <nav className="flex flex-col p-6 gap-6">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium text-zinc-400 hover:text-red-500"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {links.map((link) =>
+                link.href === '/' ? (
+                  <button
+                    key={link.href}
+                    onClick={scrollToTop}
+                    className="text-lg font-medium text-zinc-400 hover:text-red-500 text-left cursor-pointer"
+                  >
+                    {link.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-medium text-zinc-400 hover:text-red-500"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
               <Button className="w-full bg-red-600 hover:bg-red-700 text-white rounded-md mt-4">
                 {t('booking')}
               </Button>

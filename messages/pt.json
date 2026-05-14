@@ -107,6 +107,24 @@
       }
     }
   },
+  "Location": {
+    "visitUs": "Visite-nos",
+    "studioTitle": "Black Ink Studio",
+    "studioDescription": "Um espaço premium para tatuagens e arte corporal. Agende uma consulta, visite nosso showroom ou entre em contato conosco com suas ideias.",
+    "address": "Endereço",
+    "phone": "Telefone",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "hours": "Horários",
+    "monFri": "Seg - Sex",
+    "saturday": "Sábado",
+    "sunday": "Domingo",
+    "byAppointment": "Com hora marcada",
+    "visitOurStudio": "Visite nosso estúdio",
+    "santiagoChile": "Santiago, Chile",
+    "viewMap": "Ver mapa",
+    "mapTitle": "Localização Black Ink"
+  },
   "Footer": {
     "description": "Estúdio de tatuagem premium oferecendo arte excepcional e uma experiência única. Seu corpo é nossa tela.",
     "quickLinks": "LINKS RÁPIDOS",
