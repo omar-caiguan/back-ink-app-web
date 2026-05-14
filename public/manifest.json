@@ -1,0 +1,20 @@
+{
+  "name": "Black Ink Tattoo Studio",
+  "short_name": "Black Ink",
+  "description": "Estudio de tatuajes premium en Santiago, Chile. Blackwork, realismo, neotradicional y diseños personalizados.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#dc2626",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/icon/blackink.PNG",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

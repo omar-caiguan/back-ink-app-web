@@ -26,9 +26,9 @@ export function Location() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <InfoRow icon={<MapPin className="h-4 w-4" />} label="Dirección" value="Santiago, Región Metropolitana" />
-              <InfoRow icon={<Phone className="h-4 w-4" />} label="Teléfono" value="+56 9 1234 5678" href="tel:+56912345678" />
-              <InfoRow icon={<Mail className="h-4 w-4" />} label="Email" value="contacto@blackink.cl" href="mailto:contacto@blackink.cl" />
-              <InfoRow icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp" value="+56 9 8765 4321" href="https://wa.me/56987654321" />
+              <InfoRow icon={<Phone className="h-4 w-4" />} label="Teléfono" value="+56 9 3057 9869" href="tel:+56930579869" />
+              <InfoRow icon={<Mail className="h-4 w-4" />} label="Email" value="omar.caiguan@gmail.com" href="mailto:omar.caiguan@gmail.com" />
+              <InfoRow icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp" value="+56 9 3057 9869" href="https://wa.me/56930579869" />
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2 text-sm text-zinc-300">
@@ -49,7 +49,7 @@ export function Location() {
                 <Facebook className="h-4 w-4" /> Facebook
               </a>
               <a
-                href="https://wa.me/56987654321"
+                href="https://wa.me/56930579869"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-500 hover:text-white transition"

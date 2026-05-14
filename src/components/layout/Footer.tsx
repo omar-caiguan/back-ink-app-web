@@ -56,15 +56,15 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-zinc-500 text-sm">
                 <MapPin size={18} className="text-red-500 shrink-0" />
-                <span>123 Ink Street, Creative District, Santiago, Chile</span>
+                <span>Santiago, Región Metropolitana, Chile</span>
               </li>
               <li className="flex items-center gap-3 text-zinc-500 text-sm">
                 <Phone size={18} className="text-red-500 shrink-0" />
-                <span>+56 9 1234 5678</span>
+                <span>+56 9 3057 9869</span>
               </li>
               <li className="flex items-center gap-3 text-zinc-500 text-sm">
                 <Mail size={18} className="text-red-500 shrink-0" />
-                <span>contact@blackink.com</span>
+                <span>omar.caiguan@gmail.com</span>
               </li>
             </ul>
           </div>
