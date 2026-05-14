@@ -64,10 +64,14 @@
     "title": "Ponte en Contacto",
     "heading": "Comienza Tu Proyecto",
     "steps": {
-      "1": "Detalles",
-      "2": "Idea",
-      "3": "Artista",
-      "4": "Resumen"
+      "1": "Tus Datos",
+      "1sub": "Cómo contactarte",
+      "2": "Tu Idea",
+      "2sub": "Estilo y color",
+      "3": "Especificaciones",
+      "3sub": "Ubicación y tamaño",
+      "4": "Agenda",
+      "4sub": "Artista y horario"
     },
     "form": {
       "next": "Siguiente",
@@ -75,36 +79,68 @@
       "submit": "Enviar Solicitud",
       "sending": "Enviando...",
       "sent": "¡Enviado!",
-      "personal": {
-        "title": "Cuéntanos sobre ti",
+      "optional": "Opcional",
+      "step1": {
         "name": "Nombre Completo",
+        "namePlaceholder": "Tu nombre",
+        "phone": "Teléfono Móvil",
+        "phonePlaceholder": "+56 9 0000 0000",
         "email": "Correo Electrónico",
-        "phone": "Teléfono"
+        "emailPlaceholder": "tu@email.com",
+        "ageConfirm": "Confirmo que soy mayor de 18 años"
       },
-      "idea": {
-        "title": "Describe tu visión",
-        "serviceType": "Tipo de Servicio",
-        "placement": "Zona del Cuerpo",
-        "size": "Tamaño Aproximado",
-        "description": "Descripción Detallada"
+      "step2": {
+        "style": "Estilo de Tatuaje",
+        "stylePlaceholder": "Selecciona un estilo",
+        "color": "Color",
+        "description": "Describe tu idea",
+        "descriptionPlaceholder": "Cuentanos brevemente tu idea (opcional)"
+      },
+      "step3": {
+        "placement": "Ubicación en el cuerpo",
+        "placementPlaceholder": "Ej: Brazo, espalda, pierna...",
+        "size": "Tamaño estimado",
+        "references": "Referencias visuales (Fotos)",
+        "referencesHint": "Puedes adjuntar fotos de referencia o enviarlas luego por WhatsApp"
+      },
+      "step4": {
+        "artist": "Preferencia de Artista",
+        "schedule": "Preferencia de Agenda",
+        "schedulePlaceholder": "Ej: Fines de semana, mañanas, etc."
       },
       "preferences": {
-        "title": "Artista y Disponibilidad",
-        "artist": "Artista Preferido",
-        "anyArtist": "Cualquier Artista (Primer disponible)",
-        "budget": "Rango de Presupuesto",
-        "contactMethod": "¿Cómo te gustaría ser contactado?",
-        "email": "Correo",
-        "emailDesc": "Recibir confirmación por mail",
-        "whatsapp": "WhatsApp",
-        "whatsappDesc": "Abrir chat con tu formulario",
-        "both": "Ambos",
-        "bothDesc": "Notificación por correo + WhatsApp"
-      },
-      "review": {
-        "title": "Revisa tu solicitud",
-        "summaryText": "Por favor verifica tus datos antes de enviar."
+        "anyArtist": "Cualquier artista",
+        "anyArtistSub": "Primer disponible"
       }
+    },
+    "errors": {
+      "required": "Este campo es obligatorio",
+      "ageRequired": "Debes confirmar que eres mayor de 18",
+      "fixFields": "Por favor completa los campos obligatorios",
+      "generic": "Algo salió mal. Intenta de nuevo."
+    },
+    "colors": {
+      "black": "Negro / Sombras",
+      "color": "A Color"
+    },
+    "sizes": {
+      "small": "Pequeño",
+      "medium": "Mediano",
+      "large": "Grande"
+    },
+    "anyArtist": "Cualquier artista (primer disponible)",
+    "whatsapp": {
+      "title": "Nueva Solicitud - Black Ink Studio",
+      "name": "Nombre",
+      "phone": "Teléfono",
+      "email": "Email",
+      "style": "Estilo",
+      "color": "Color",
+      "placement": "Ubicación",
+      "size": "Tamaño",
+      "artist": "Artista",
+      "schedule": "Preferencia de horario",
+      "description": "Descripción"
     }
   },
   "Location": {

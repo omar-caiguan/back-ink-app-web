@@ -64,47 +64,83 @@
     "title": "Get In Touch",
     "heading": "Start Your Project",
     "steps": {
-      "1": "Details",
-      "2": "Idea",
-      "3": "Artist",
-      "4": "Review"
+      "1": "Your Details",
+      "1sub": "How to reach you",
+      "2": "Your Idea",
+      "2sub": "Style & color",
+      "3": "Specifications",
+      "3sub": "Placement & size",
+      "4": "Scheduling",
+      "4sub": "Artist & timing"
     },
     "form": {
-      "next": "Next Step",
+      "next": "Next",
       "back": "Back",
       "submit": "Submit Request",
       "sending": "Sending...",
       "sent": "Sent!",
-      "personal": {
-        "title": "Tell us about yourself",
+      "optional": "Optional",
+      "step1": {
         "name": "Full Name",
+        "namePlaceholder": "Your name",
+        "phone": "Mobile Phone",
+        "phonePlaceholder": "+1 234 567 8900",
         "email": "Email Address",
-        "phone": "Phone Number"
+        "emailPlaceholder": "you@email.com",
+        "ageConfirm": "I confirm I am over 18 years old"
       },
-      "idea": {
-        "title": "Describe your vision",
-        "serviceType": "Service Type",
+      "step2": {
+        "style": "Tattoo Style",
+        "stylePlaceholder": "Select a style",
+        "color": "Color",
+        "description": "Describe your idea",
+        "descriptionPlaceholder": "Briefly tell us your idea (optional)"
+      },
+      "step3": {
         "placement": "Body Placement",
-        "size": "Approximate Size",
-        "description": "Detailed Description"
+        "placementPlaceholder": "e.g. Arm, back, leg...",
+        "size": "Estimated Size",
+        "references": "Visual References (Photos)",
+        "referencesHint": "You can attach reference photos or send them later via WhatsApp"
+      },
+      "step4": {
+        "artist": "Artist Preference",
+        "schedule": "Schedule Preference",
+        "schedulePlaceholder": "e.g. Weekends, mornings, etc."
       },
       "preferences": {
-        "title": "Artist & Availability",
-        "artist": "Preferred Artist",
-        "anyArtist": "Any Artist (First Available)",
-        "budget": "Budget Range",
-        "contactMethod": "How would you like to be contacted?",
-        "email": "Email",
-        "emailDesc": "Receive confirmation by mail",
-        "whatsapp": "WhatsApp",
-        "whatsappDesc": "Open chat with your form",
-        "both": "Both",
-        "bothDesc": "Email + WhatsApp notification"
-      },
-      "review": {
-        "title": "Review your request",
-        "summaryText": "Please verify your details before submitting."
+        "anyArtist": "Any artist",
+        "anyArtistSub": "First available"
       }
+    },
+    "errors": {
+      "required": "This field is required",
+      "ageRequired": "You must confirm you are over 18",
+      "fixFields": "Please fill in all required fields",
+      "generic": "Something went wrong. Please try again."
+    },
+    "colors": {
+      "black": "Black / Shading",
+      "color": "Full Color"
+    },
+    "sizes": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large"
+    },
+    "anyArtist": "Any artist (first available)",
+    "whatsapp": {
+      "title": "New Request - Black Ink Studio",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "style": "Style",
+      "color": "Color",
+      "placement": "Placement",
+      "size": "Size",
+      "artist": "Artist",
+      "schedule": "Schedule preference",
+      "description": "Description"
     }
   },
   "Location": {

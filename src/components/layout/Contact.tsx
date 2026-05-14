@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,77 +17,159 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from '@/lib/utils';
-import { Check, ChevronRight, ChevronLeft, Calendar, User, FileText, Image as ImageIcon, Mail, MessageCircle, Send, Loader2 } from 'lucide-react';
+import {
+  Check,
+  ChevronRight,
+  ChevronLeft,
+  User,
+  ImagePlus,
+  CalendarDays,
+  Loader2,
+  AlertCircle,
+  PenTool,
+  Ruler,
+  MapPin,
+  Clock
+} from 'lucide-react';
 
 export function Contact() {
   const t = useTranslations('Contact');
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
+    // Step 1
     name: '',
-    email: '',
     phone: '',
-    serviceType: '',
+    email: '',
+    ageConfirmed: false,
+    // Step 2
+    tattooStyle: '',
+    colorType: '',
+    description: '',
+    // Step 3
     placement: '',
     size: '',
-    description: '',
-    artist: 'any',
-    budget: '',
-    contactPreference: 'email',
+    references: null as FileList | null,
+    // Step 4
+    artist: '',
+    schedulePreference: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const totalSteps = 4;
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, totalSteps));
-  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+  const validateStep = useCallback((currentStep: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (currentStep === 1) {
+      if (!formData.name.trim()) newErrors.name = t('errors.required');
+      if (!formData.phone.trim()) newErrors.phone = t('errors.required');
+      if (!formData.ageConfirmed) newErrors.ageConfirmed = t('errors.ageRequired');
+    }
+
+    if (currentStep === 2) {
+      if (!formData.tattooStyle) newErrors.tattooStyle = t('errors.required');
+      if (!formData.colorType) newErrors.colorType = t('errors.required');
+    }
+
+    if (currentStep === 3) {
+      if (!formData.placement.trim()) newErrors.placement = t('errors.required');
+      if (!formData.size) newErrors.size = t('errors.required');
+    }
+
+    if (currentStep === 4) {
+      if (!formData.artist) newErrors.artist = t('errors.required');
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData, t]);
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep((prev) => Math.min(prev + 1, totalSteps));
+    } else {
+      toast.error(t('errors.fixFields'));
+    }
+  };
+
+  const prevStep = () => {
+    setErrors({});
+    setStep((prev) => Math.max(prev - 1, 1));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+    if (errors[id]) setErrors((prev) => { const n = { ...prev }; delete n[id]; return n; });
   };
 
   const handleSelectChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+    if (errors[key]) setErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+  };
+
+  const handleCheckboxChange = (key: string, checked: boolean) => {
+    setFormData((prev) => ({ ...prev, [key]: checked }));
+    if (errors[key]) setErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, references: e.target.files }));
   };
 
   const generateWhatsAppLink = () => {
-    const budgetLabel: Record<string, string> = {
-      low: '$100 - $300',
-      medium: '$300 - $800',
-      high: '$800+',
-      flexible: 'Flexible',
+    const sizeLabel: Record<string, string> = {
+      small: t('sizes.small'),
+      medium: t('sizes.medium'),
+      large: t('sizes.large'),
     };
-    const artistLabel = formData.artist === 'any' ? 'First Available' : formData.artist;
+    const artistLabel = formData.artist === 'any' ? t('anyArtist') : formData.artist;
+    const colorLabel = formData.colorType === 'black' ? t('colors.black') : t('colors.color');
     const message = encodeURIComponent(
-      `*New Booking Request - Black Ink Studio*\n\n` +
-      `*Name:* ${formData.name}\n` +
-      `*Email:* ${formData.email}\n` +
-      `*Phone:* ${formData.phone || 'N/A'}\n` +
-      `*Service:* ${formData.serviceType}\n` +
-      `*Placement:* ${formData.placement || 'N/A'}\n` +
-      `*Size:* ${formData.size || 'N/A'}\n` +
-      `*Artist:* ${artistLabel}\n` +
-      `*Budget:* ${budgetLabel[formData.budget] || formData.budget || 'N/A'}\n\n` +
-      `*Description:*\n${formData.description || 'No description provided.'}`
+      `*${t('whatsapp.title')}*\n\n` +
+      `*${t('whatsapp.name')}:* ${formData.name}\n` +
+      `*${t('whatsapp.phone')}:* ${formData.phone}\n` +
+      (formData.email ? `*${t('whatsapp.email')}:* ${formData.email}\n` : '') +
+      `*${t('whatsapp.style')}:* ${formData.tattooStyle}\n` +
+      `*${t('whatsapp.color')}:* ${colorLabel}\n` +
+      `*${t('whatsapp.placement')}:* ${formData.placement}\n` +
+      `*${t('whatsapp.size')}:* ${sizeLabel[formData.size] || formData.size}\n` +
+      `*${t('whatsapp.artist')}:* ${artistLabel}\n` +
+      (formData.schedulePreference ? `*${t('whatsapp.schedule')}:* ${formData.schedulePreference}\n` : '') +
+      (formData.description ? `\n*${t('whatsapp.description')}:*\n${formData.description}` : '')
     );
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '1234567890';
+    const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '56930579869';
     return `https://wa.me/${phone}?text=${message}`;
   };
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.email || !formData.serviceType) {
-      toast.error('Please fill in all required fields.');
+    if (!validateStep(step)) {
+      toast.error(t('errors.fixFields'));
       return;
     }
 
     setIsSubmitting(true);
 
     try {
+      const payload = {
+        name: formData.name,
+        email: formData.email || undefined,
+        phone: formData.phone,
+        tattooStyle: formData.tattooStyle,
+        colorType: formData.colorType,
+        description: formData.description || undefined,
+        placement: formData.placement,
+        size: formData.size,
+        artist: formData.artist,
+        schedulePreference: formData.schedulePreference || undefined,
+      };
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -96,404 +178,453 @@ export function Contact() {
       }
 
       setIsSuccess(true);
-      toast.success('Request sent successfully!');
+      toast.success(t('form.sent'));
 
-      if (formData.contactPreference === 'whatsapp' || formData.contactPreference === 'both') {
-        const waLink = generateWhatsAppLink();
-        window.open(waLink, '_blank');
-      }
+      const waLink = generateWhatsAppLink();
+      window.open(waLink, '_blank');
     } catch (err: any) {
-      toast.error(err.message || 'Something went wrong. Please try again.');
+      toast.error(err.message || t('errors.generic'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const steps = [
-    { number: 1, title: t('steps.1'), icon: User },
-    { number: 2, title: t('steps.2'), icon: FileText },
-    { number: 3, title: t('steps.3'), icon: ImageIcon },
-    { number: 4, title: t('steps.4'), icon: Check },
+  const stepTitles = [
+    { number: 1, title: t('steps.1'), subtitle: t('steps.1sub') },
+    { number: 2, title: t('steps.2'), subtitle: t('steps.2sub') },
+    { number: 3, title: t('steps.3'), subtitle: t('steps.3sub') },
+    { number: 4, title: t('steps.4'), subtitle: t('steps.4sub') },
+  ];
+
+  const tattooStyles = [
+    'Realismo', 'Fine Line', 'Tradicional', 'Blackwork',
+    'Neotradicional', 'Japonés', 'Geométrico', ' lettering', 'Otro'
   ];
 
   return (
     <section id="contact" className="py-24 bg-black/90 border-t border-white/5 relative overflow-hidden">
-        {/* Background Accents */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-zinc-800/10 rounded-full blur-[100px]" />
-        </div>
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-red-900/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-zinc-800/10 rounded-full blur-[100px]" />
+      </div>
 
-      <div className="container mx-auto px-4 max-w-4xl relative z-10">
-         <motion.div
+      <div className="container mx-auto px-4 max-w-3xl relative z-10">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-           <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
-           <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
+          <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
+          <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
         </motion.div>
 
-        {/* Progress Bar */}
-        <div className="mb-12">
-            <div className="flex justify-between items-center relative">
-                {/* Line */}
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] bg-zinc-800 -z-10" />
-                <div 
-                    className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-red-600 -z-10 transition-all duration-500 ease-in-out" 
-                    style={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
-                />
+        {/* Step Counter Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-baseline gap-3">
+            <span className="text-4xl font-bold text-red-600 font-heading">{step}</span>
+            <span className="text-xl text-zinc-500 font-heading">/ {totalSteps}</span>
+          </div>
+          <div className="text-right">
+            <p className="text-white font-medium text-sm uppercase tracking-wider">{stepTitles[step - 1].title}</p>
+            <p className="text-zinc-500 text-xs">{stepTitles[step - 1].subtitle}</p>
+          </div>
+        </div>
 
-                {steps.map((s) => (
-                    <div key={s.number} className="flex flex-col items-center gap-2 bg-zinc-950 px-2">
-                        <div 
-                            className={cn(
-                                "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                                step >= s.number 
-                                    ? "border-red-600 bg-red-600 text-white" 
-                                    : "border-zinc-700 bg-zinc-900 text-zinc-500"
-                            )}
-                        >
-                            <s.icon size={18} />
-                        </div>
-                        <span className={cn(
-                            "text-xs uppercase tracking-wider font-medium transition-colors",
-                            step >= s.number ? "text-white" : "text-zinc-600"
-                        )}>
-                            {s.title}
-                        </span>
-                    </div>
-                ))}
-            </div>
+        {/* Progress Bar */}
+        <div className="w-full h-1 bg-zinc-800 rounded-full mb-10 overflow-hidden">
+          <motion.div
+            className="h-full bg-red-600"
+            initial={false}
+            animate={{ width: `${(step / totalSteps) * 100}%` }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+          />
         </div>
 
         <div className="bg-zinc-900/50 border border-zinc-800 p-6 md:p-10 rounded-xl backdrop-blur-sm shadow-2xl">
           <AnimatePresence mode="wait">
+            {/* STEP 1: Contact Info */}
             {step === 1 && (
-                <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                >
-                    <div className="space-y-2 mb-6">
-                        <h4 className="text-xl font-heading text-white">{t('form.personal.title')}</h4>
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="grid grid-cols-1 gap-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-zinc-300 flex items-center gap-1">
+                      {t('form.step1.name')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step1.namePlaceholder')}
+                      className={cn(
+                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
+                        errors.name && "border-red-500 focus:border-red-500"
+                      )}
+                    />
+                    {errors.name && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-zinc-300 flex items-center gap-1">
+                      {t('form.step1.phone')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step1.phonePlaceholder')}
+                      className={cn(
+                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
+                        errors.phone && "border-red-500 focus:border-red-500"
+                      )}
+                    />
+                    {errors.phone && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phone}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-zinc-300">
+                      {t('form.step1.email')}
+                      <span className="text-zinc-600 text-xs ml-2">({t('form.optional')})</span>
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step1.emailPlaceholder')}
+                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12"
+                    />
+                  </div>
+
+                  <div className="flex items-start gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="ageConfirmed"
+                      checked={formData.ageConfirmed}
+                      onChange={(e) => handleCheckboxChange('ageConfirmed', e.target.checked)}
+                      className={cn(
+                        "mt-0.5 h-4 w-4 shrink-0 rounded border border-zinc-600 bg-zinc-950 text-red-600 accent-red-600 focus:ring-red-600 cursor-pointer",
+                        errors.ageConfirmed && "border-red-500"
+                      )}
+                    />
+                    <div className="space-y-1">
+                      <Label htmlFor="ageConfirmed" className="text-zinc-300 text-sm cursor-pointer">
+                        {t('form.step1.ageConfirm')}
+                        <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      {errors.ageConfirmed && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.ageConfirmed}</p>}
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="name" className="text-zinc-300">{t('form.personal.name')}</Label>
-                            <Input 
-                                id="name" 
-                                value={formData.name} 
-                                onChange={handleInputChange}
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12" 
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="text-zinc-300">{t('form.personal.email')}</Label>
-                            <Input 
-                                id="email" 
-                                type="email" 
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12" 
-                            />
-                        </div>
-                        <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="phone" className="text-zinc-300">{t('form.personal.phone')}</Label>
-                            <Input 
-                                id="phone" 
-                                type="tel" 
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12" 
-                            />
-                        </div>
-                    </div>
-                </motion.div>
+                  </div>
+                </div>
+              </motion.div>
             )}
 
+            {/* STEP 2: Creative Idea */}
             {step === 2 && (
-                <motion.div
-                    key="step2"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                >
-                    <div className="space-y-2 mb-6">
-                        <h4 className="text-xl font-heading text-white">{t('form.idea.title')}</h4>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div className="space-y-2">
-                            <Label className="text-zinc-300">{t('form.idea.serviceType')}</Label>
-                            <Select onValueChange={(val) => handleSelectChange('serviceType', val)} defaultValue={formData.serviceType}>
-                                <SelectTrigger className="bg-zinc-950 border-zinc-800 text-white h-12">
-                                    <SelectValue placeholder="Select type" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-zinc-800 text-white">
-                                    <SelectItem value="custom">Custom Design</SelectItem>
-                                    <SelectItem value="realism">Realism</SelectItem>
-                                    <SelectItem value="traditional">Traditional</SelectItem>
-                                    <SelectItem value="coverup">Cover Up</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="placement" className="text-zinc-300">{t('form.idea.placement')}</Label>
-                            <Input 
-                                id="placement" 
-                                value={formData.placement}
-                                onChange={handleInputChange}
-                                placeholder="e.g. Forearm, Back, Leg"
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12" 
-                            />
-                        </div>
-                        <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="size" className="text-zinc-300">{t('form.idea.size')}</Label>
-                            <Input 
-                                id="size" 
-                                value={formData.size}
-                                onChange={handleInputChange}
-                                placeholder="e.g. 15cm x 10cm"
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12" 
-                            />
-                        </div>
-                        <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="description" className="text-zinc-300">{t('form.idea.description')}</Label>
-                            <Textarea 
-                                id="description" 
-                                value={formData.description}
-                                onChange={handleInputChange}
-                                className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 min-h-[120px]" 
-                            />
-                        </div>
-                    </div>
-                </motion.div>
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300 flex items-center gap-1">
+                      <PenTool className="w-4 h-4 text-red-500" />
+                      {t('form.step2.style')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Select
+                      onValueChange={(val) => handleSelectChange('tattooStyle', val)}
+                      value={formData.tattooStyle}
+                    >
+                      <SelectTrigger className={cn(
+                        "bg-zinc-950 border-zinc-800 text-white h-12",
+                        errors.tattooStyle && "border-red-500"
+                      )}>
+                        <SelectValue placeholder={t('form.step2.stylePlaceholder')} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-zinc-950 border-zinc-800 text-white">
+                        {tattooStyles.map((style) => (
+                          <SelectItem key={style} value={style.toLowerCase()}>{style}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.tattooStyle && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.tattooStyle}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300 flex items-center gap-1">
+                      {t('form.step2.color')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <RadioGroup
+                      value={formData.colorType}
+                      onValueChange={(val) => handleSelectChange('colorType', val)}
+                      className="grid grid-cols-2 gap-3"
+                    >
+                      <div className="relative">
+                        <RadioGroupItem value="black" id="color-black" className="peer sr-only" />
+                        <Label
+                          htmlFor="color-black"
+                          className={cn(
+                            "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
+                            formData.colorType === 'black'
+                              ? "border-red-600"
+                              : "border-zinc-800"
+                          )}
+                        >
+                          <span className="text-white font-bold">{t('colors.black')}</span>
+                        </Label>
+                      </div>
+                      <div className="relative">
+                        <RadioGroupItem value="color" id="color-color" className="peer sr-only" />
+                        <Label
+                          htmlFor="color-color"
+                          className={cn(
+                            "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
+                            formData.colorType === 'color'
+                              ? "border-red-600"
+                              : "border-zinc-800"
+                          )}
+                        >
+                          <span className="text-white font-bold">{t('colors.color')}</span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                    {errors.colorType && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.colorType}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="description" className="text-zinc-300">
+                      {t('form.step2.description')}
+                      <span className="text-zinc-600 text-xs ml-2">({t('form.optional')})</span>
+                    </Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step2.descriptionPlaceholder')}
+                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 min-h-[100px]"
+                    />
+                  </div>
+                </div>
+              </motion.div>
             )}
 
+            {/* STEP 3: Technical Specs */}
             {step === 3 && (
-                <motion.div
-                    key="step3"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                >
-                     <div className="space-y-2 mb-6">
-                        <h4 className="text-xl font-heading text-white">{t('form.preferences.title')}</h4>
-                    </div>
-                    
-                    <div className="space-y-6">
-                        <div className="space-y-3">
-                            <Label className="text-zinc-300 text-lg">{t('form.preferences.artist')}</Label>
-                            <RadioGroup 
-                                defaultValue={formData.artist} 
-                                onValueChange={(val) => handleSelectChange('artist', val)}
-                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                            >
-                                <div className="relative">
-                                    <RadioGroupItem value="any" id="r1" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="r1"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <span className="text-white font-bold">{t('form.preferences.anyArtist')}</span>
-                                        <span className="text-zinc-500 text-xs mt-1">Earliest availability</span>
-                                    </Label>
-                                </div>
-                                <div className="relative">
-                                    <RadioGroupItem value="alex" id="r2" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="r2"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <span className="text-white font-bold">Alex "Ink" Ryker</span>
-                                        <span className="text-zinc-500 text-xs mt-1">Realism Specialist</span>
-                                    </Label>
-                                </div>
-                                <div className="relative">
-                                    <RadioGroupItem value="elena" id="r3" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="r3"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <span className="text-white font-bold">Elena Vance</span>
-                                        <span className="text-zinc-500 text-xs mt-1">Traditional Specialist</span>
-                                    </Label>
-                                </div>
-                                 <div className="relative">
-                                    <RadioGroupItem value="marcus" id="r4" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="r4"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <span className="text-white font-bold">Marcus Thorne</span>
-                                        <span className="text-zinc-500 text-xs mt-1">Neotraditional Specialist</span>
-                                    </Label>
-                                </div>
-                            </RadioGroup>
-                        </div>
+              <motion.div
+                key="step3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="placement" className="text-zinc-300 flex items-center gap-1">
+                      <MapPin className="w-4 h-4 text-red-500" />
+                      {t('form.step3.placement')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="placement"
+                      value={formData.placement}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step3.placementPlaceholder')}
+                      className={cn(
+                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
+                        errors.placement && "border-red-500 focus:border-red-500"
+                      )}
+                    />
+                    {errors.placement && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.placement}</p>}
+                  </div>
 
-                         <div className="space-y-2">
-                            <Label htmlFor="budget" className="text-zinc-300">{t('form.preferences.budget')}</Label>
-                            <Select onValueChange={(val) => handleSelectChange('budget', val)} defaultValue={formData.budget}>
-                                <SelectTrigger className="bg-zinc-950 border-zinc-800 text-white h-12">
-                                    <SelectValue placeholder="Select range" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-zinc-950 border-zinc-800 text-white">
-                                    <SelectItem value="low">$100 - $300</SelectItem>
-                                    <SelectItem value="medium">$300 - $800</SelectItem>
-                                    <SelectItem value="high">$800+</SelectItem>
-                                    <SelectItem value="flexible">Flexible</SelectItem>
-                                </SelectContent>
-                            </Select>
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300 flex items-center gap-1">
+                      <Ruler className="w-4 h-4 text-red-500" />
+                      {t('form.step3.size')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <RadioGroup
+                      value={formData.size}
+                      onValueChange={(val) => handleSelectChange('size', val)}
+                      className="grid grid-cols-3 gap-3"
+                    >
+                      {[
+                        { value: 'small', label: t('sizes.small') },
+                        { value: 'medium', label: t('sizes.medium') },
+                        { value: 'large', label: t('sizes.large') },
+                      ].map((opt) => (
+                        <div key={opt.value} className="relative">
+                          <RadioGroupItem value={opt.value} id={`size-${opt.value}`} className="peer sr-only" />
+                          <Label
+                            htmlFor={`size-${opt.value}`}
+                            className={cn(
+                              "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
+                              formData.size === opt.value
+                                ? "border-red-600"
+                                : "border-zinc-800"
+                            )}
+                          >
+                            <span className="text-white font-bold text-sm">{opt.label}</span>
+                          </Label>
                         </div>
+                      ))}
+                    </RadioGroup>
+                    {errors.size && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.size}</p>}
+                  </div>
 
-                        <div className="space-y-3">
-                            <Label className="text-zinc-300 text-lg">{t('form.preferences.contactMethod')}</Label>
-                            <RadioGroup
-                                defaultValue={formData.contactPreference}
-                                onValueChange={(val) => handleSelectChange('contactPreference', val)}
-                                className="grid grid-cols-1 md:grid-cols-3 gap-4"
-                            >
-                                <div className="relative">
-                                    <RadioGroupItem value="email" id="c1" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="c1"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <Mail className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
-                                        <span className="text-white font-bold">{t('form.preferences.email')}</span>
-                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.emailDesc')}</span>
-                                    </Label>
-                                </div>
-                                <div className="relative">
-                                    <RadioGroupItem value="whatsapp" id="c2" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="c2"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <MessageCircle className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
-                                        <span className="text-white font-bold">{t('form.preferences.whatsapp')}</span>
-                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.whatsappDesc')}</span>
-                                    </Label>
-                                </div>
-                                <div className="relative">
-                                    <RadioGroupItem value="both" id="c3" className="peer sr-only" />
-                                    <Label
-                                        htmlFor="c3"
-                                        className="flex flex-col items-center justify-between rounded-md border-2 border-zinc-800 bg-zinc-950 p-4 hover:bg-zinc-900 peer-data-[state=checked]:border-red-600 [&:has([data-state=checked])]:border-red-600 cursor-pointer transition-all"
-                                    >
-                                        <Send className="w-6 h-6 text-zinc-400 mb-2 peer-data-[state=checked]:text-red-500" />
-                                        <span className="text-white font-bold">{t('form.preferences.both')}</span>
-                                        <span className="text-zinc-500 text-xs mt-1">{t('form.preferences.bothDesc')}</span>
-                                    </Label>
-                                </div>
-                            </RadioGroup>
-                        </div>
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300 flex items-center gap-1">
+                      <ImagePlus className="w-4 h-4 text-zinc-400" />
+                      {t('form.step3.references')}
+                      <span className="text-zinc-600 text-xs ml-2">({t('form.optional')})</span>
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-red-600 file:text-white file:text-sm hover:file:bg-red-700"
+                      />
                     </div>
-                </motion.div>
+                    <p className="text-zinc-600 text-xs">{t('form.step3.referencesHint')}</p>
+                  </div>
+                </div>
+              </motion.div>
             )}
 
-             {step === 4 && (
-                <motion.div
-                    key="step4"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6 text-center"
-                >
-                    <div className="space-y-4 mb-6">
-                        <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Check className="text-white w-8 h-8" />
+            {/* STEP 4: Artist & Schedule */}
+            {step === 4 && (
+              <motion.div
+                key="step4"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300 flex items-center gap-1">
+                      <User className="w-4 h-4 text-red-500" />
+                      {t('form.step4.artist')}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <RadioGroup
+                      value={formData.artist}
+                      onValueChange={(val) => handleSelectChange('artist', val)}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                    >
+                      {[
+                        { value: 'any', label: t('form.preferences.anyArtist'), sub: t('form.preferences.anyArtistSub') },
+                        { value: 'alex', label: 'Alex "Ink" Ryker', sub: 'Realismo & Blackwork' },
+                        { value: 'elena', label: 'Elena Vance', sub: 'Tradicional & Color' },
+                        { value: 'marcus', label: 'Marcus Thorne', sub: 'Neotradicional' },
+                      ].map((opt) => (
+                        <div key={opt.value} className="relative">
+                          <RadioGroupItem value={opt.value} id={`artist-${opt.value}`} className="peer sr-only" />
+                          <Label
+                            htmlFor={`artist-${opt.value}`}
+                            className={cn(
+                              "flex flex-col rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
+                              formData.artist === opt.value
+                                ? "border-red-600"
+                                : "border-zinc-800"
+                            )}
+                          >
+                            <span className="text-white font-bold">{opt.label}</span>
+                            <span className="text-zinc-500 text-xs mt-1">{opt.sub}</span>
+                          </Label>
                         </div>
-                        <h4 className="text-2xl font-heading text-white">{t('form.review.title')}</h4>
-                        <p className="text-zinc-400">{t('form.review.summaryText')}</p>
-                    </div>
+                      ))}
+                    </RadioGroup>
+                    {errors.artist && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.artist}</p>}
+                  </div>
 
-                    <div className="bg-zinc-950 p-6 rounded-lg text-left space-y-4 border border-zinc-800">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Name</span>
-                                <span className="text-white">{formData.name || '-'}</span>
-                            </div>
-                             <div>
-                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Service</span>
-                                <span className="text-white capitalize">{formData.serviceType || '-'}</span>
-                            </div>
-                             <div>
-                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Artist</span>
-                                <span className="text-white capitalize">{formData.artist === 'any' ? 'First Available' : formData.artist}</span>
-                            </div>
-                             <div>
-                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Budget</span>
-                                <span className="text-white capitalize">{formData.budget || '-'}</span>
-                            </div>
-                             <div>
-                                <span className="block text-zinc-500 text-xs uppercase tracking-wider">Contact Via</span>
-                                <span className="text-white capitalize">{formData.contactPreference || 'email'}</span>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
+                  <div className="space-y-2">
+                    <Label htmlFor="schedulePreference" className="text-zinc-300 flex items-center gap-1">
+                      <Clock className="w-4 h-4 text-zinc-400" />
+                      {t('form.step4.schedule')}
+                      <span className="text-zinc-600 text-xs ml-2">({t('form.optional')})</span>
+                    </Label>
+                    <Input
+                      id="schedulePreference"
+                      value={formData.schedulePreference}
+                      onChange={handleInputChange}
+                      placeholder={t('form.step4.schedulePlaceholder')}
+                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12"
+                    />
+                  </div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
 
-            <div className="flex justify-between mt-8 pt-8 border-t border-zinc-800">
-                <Button 
-                    variant="outline" 
-                    onClick={prevStep} 
-                    disabled={step === 1}
-                    className="border-zinc-700 text-white hover:bg-zinc-800 disabled:opacity-50"
-                >
-                    <ChevronLeft className="w-4 h-4 mr-2" />
-                    {t('form.back')}
-                </Button>
-                
-                {step < totalSteps ? (
-                    <Button 
-                        onClick={nextStep}
-                        className="bg-red-600 hover:bg-red-700 text-white"
-                    >
-                        {t('form.next')}
-                        <ChevronRight className="w-4 h-4 ml-2" />
-                    </Button>
-                ) : isSuccess ? (
-                    <Button 
-                        disabled
-                        className="bg-zinc-700 text-white min-w-[150px] cursor-default"
-                    >
-                        {t('form.sent')}
-                        <Check className="w-4 h-4 ml-2" />
-                    </Button>
-                ) : (
-                    <Button 
-                        onClick={handleSubmit}
-                        disabled={isSubmitting}
-                        className="bg-green-600 hover:bg-green-700 text-white min-w-[150px]"
-                    >
-                        {isSubmitting ? (
-                            <>
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                {t('form.sending')}
-                            </>
-                        ) : (
-                            <>
-                                {t('form.submit')}
-                                <Check className="w-4 h-4 ml-2" />
-                            </>
-                        )}
-                    </Button>
-                )}
-            </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-8 pt-8 border-t border-zinc-800">
+            <Button
+              variant="outline"
+              onClick={prevStep}
+              disabled={step === 1}
+              className="border-zinc-700 text-white hover:bg-zinc-800 disabled:opacity-50"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              {t('form.back')}
+            </Button>
 
+            {step < totalSteps ? (
+              <Button
+                onClick={nextStep}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                {t('form.next')}
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            ) : isSuccess ? (
+              <Button
+                disabled
+                className="bg-zinc-700 text-white min-w-[150px] cursor-default"
+              >
+                {t('form.sent')}
+                <Check className="w-4 h-4 ml-2" />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="bg-green-600 hover:bg-green-700 text-white min-w-[150px]"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    {t('form.sending')}
+                  </>
+                ) : (
+                  <>
+                    {t('form.submit')}
+                    <Check className="w-4 h-4 ml-2" />
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </section>
