@@ -109,8 +109,12 @@
         "artist": "Artist Preference"
       },
       "step5": {
-        "hint": "You can leave it blank and coordinate directly via WhatsApp"
+        "hint": "You can leave it blank and coordinate directly via WhatsApp",
+        "selectDate": "Select a date",
+        "selected": "Selected"
       },
+      "submitOnly": "Submit Form",
+      "submitAndWhatsApp": "Submit & WhatsApp",
       "preferences": {
         "anyArtist": "Any artist",
         "anyArtistSub": "First available"
@@ -119,6 +123,11 @@
     "schedule": {
       "morning": "Morning",
       "afternoon": "Afternoon"
+    },
+    "success": {
+      "title": "Request Sent!",
+      "message": "We have received your request. We will contact you shortly.",
+      "newRequest": "Send another request"
     },
     "errors": {
       "required": "This field is required",

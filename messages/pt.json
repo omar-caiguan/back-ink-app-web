@@ -109,8 +109,12 @@
         "artist": "Preferência de Artista"
       },
       "step5": {
-        "hint": "Você pode deixar em branco e coordenar diretamente pelo WhatsApp"
+        "hint": "Você pode deixar em branco e coordenar diretamente pelo WhatsApp",
+        "selectDate": "Selecione uma data",
+        "selected": "Selecionado"
       },
+      "submitOnly": "Enviar Formulário",
+      "submitAndWhatsApp": "Enviar e WhatsApp",
       "preferences": {
         "anyArtist": "Qualquer artista",
         "anyArtistSub": "Primeiro disponível"
@@ -119,6 +123,11 @@
     "schedule": {
       "morning": "Manhã",
       "afternoon": "Tarde"
+    },
+    "success": {
+      "title": "Solicitação Enviada!",
+      "message": "Recebemos sua solicitação. Entraremos em contato em breve.",
+      "newRequest": "Enviar outra solicitação"
     },
     "errors": {
       "required": "Este campo é obrigatório",
