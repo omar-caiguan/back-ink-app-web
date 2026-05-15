@@ -45,7 +45,7 @@ export function Services() {
                       e.preventDefault();
                       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="inline-flex items-center justify-center rounded-md text-sm transition-colors h-10 py-2 px-4 w-full bg-white text-black hover:bg-red-600 hover:text-white font-semibold tracking-wide cursor-pointer"
+                    className="inline-flex items-center justify-center rounded-md text-sm transition-colors h-10 py-2 px-4 w-full bg-red-950/70 text-white hover:bg-red-600 font-semibold tracking-wide cursor-pointer border border-red-900/40"
                   >
                     {t('book')}
                   </a>

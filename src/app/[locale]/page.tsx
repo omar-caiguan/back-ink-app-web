@@ -20,9 +20,9 @@ export default function Home() {
         <About />
         <Services />
         <Portfolio />
-        <Location />
         <FAQ />
         <Contact />
+        <Location />
         <Footer />
         <ChatWidget />
       </main>
