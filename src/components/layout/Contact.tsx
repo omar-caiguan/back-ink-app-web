@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +18,20 @@ import {
 } from "@/components/ui/select";
 import { cn } from '@/lib/utils';
 import {
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  format,
+  addMonths,
+  subMonths,
+  isBefore,
+  startOfDay,
+} from 'date-fns';
+import {
   Check,
   ChevronRight,
   ChevronLeft,
@@ -29,7 +43,9 @@ import {
   PenTool,
   Ruler,
   MapPin,
-  Clock
+  Clock,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export function Contact() {
@@ -39,7 +55,8 @@ export function Contact() {
   const [formData, setFormData] = useState({
     // Step 1
     name: '',
-    phone: '',
+    phoneCountry: '+56',
+    phoneNumber: '',
     email: '',
     ageConfirmed: false,
     // Step 2
@@ -52,19 +69,22 @@ export function Contact() {
     references: null as FileList | null,
     // Step 4
     artist: '',
-    schedulePreference: '',
+    scheduleDate: '',
+    scheduleTime: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const totalSteps = 4;
+  const totalSteps = 5;
+
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
 
   const validateStep = useCallback((currentStep: number): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (currentStep === 1) {
       if (!formData.name.trim()) newErrors.name = t('errors.required');
-      if (!formData.phone.trim()) newErrors.phone = t('errors.required');
+      if (!formData.phoneNumber.trim()) newErrors.phoneNumber = t('errors.required');
       if (!formData.ageConfirmed) newErrors.ageConfirmed = t('errors.ageRequired');
     }
 
@@ -127,17 +147,20 @@ export function Contact() {
     };
     const artistLabel = formData.artist === 'any' ? t('anyArtist') : formData.artist;
     const colorLabel = formData.colorType === 'black' ? t('colors.black') : t('colors.color');
+    const scheduleValue = formData.scheduleDate || formData.scheduleTime
+      ? `${formData.scheduleDate}${formData.scheduleTime ? ' ' + formData.scheduleTime : ''}`
+      : '';
     const message = encodeURIComponent(
       `*${t('whatsapp.title')}*\n\n` +
       `*${t('whatsapp.name')}:* ${formData.name}\n` +
-      `*${t('whatsapp.phone')}:* ${formData.phone}\n` +
+      `*${t('whatsapp.phone')}:* ${formData.phoneCountry} ${formData.phoneNumber}\n` +
       (formData.email ? `*${t('whatsapp.email')}:* ${formData.email}\n` : '') +
       `*${t('whatsapp.style')}:* ${formData.tattooStyle}\n` +
       `*${t('whatsapp.color')}:* ${colorLabel}\n` +
       `*${t('whatsapp.placement')}:* ${formData.placement}\n` +
       `*${t('whatsapp.size')}:* ${sizeLabel[formData.size] || formData.size}\n` +
       `*${t('whatsapp.artist')}:* ${artistLabel}\n` +
-      (formData.schedulePreference ? `*${t('whatsapp.schedule')}:* ${formData.schedulePreference}\n` : '') +
+      (scheduleValue ? `*${t('whatsapp.schedule')}:* ${scheduleValue}\n` : '') +
       (formData.description ? `\n*${t('whatsapp.description')}:*\n${formData.description}` : '')
     );
     const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '56930579869';
@@ -153,17 +176,20 @@ export function Contact() {
     setIsSubmitting(true);
 
     try {
+      const scheduleValue = formData.scheduleDate || formData.scheduleTime
+        ? `${formData.scheduleDate}${formData.scheduleTime ? ' ' + formData.scheduleTime : ''}`
+        : undefined;
       const payload = {
         name: formData.name,
         email: formData.email || undefined,
-        phone: formData.phone,
+        phone: `${formData.phoneCountry} ${formData.phoneNumber}`,
         tattooStyle: formData.tattooStyle,
         colorType: formData.colorType,
         description: formData.description || undefined,
         placement: formData.placement,
         size: formData.size,
         artist: formData.artist,
-        schedulePreference: formData.schedulePreference || undefined,
+        schedulePreference: scheduleValue,
       };
 
       const res = await fetch('/api/contact', {
@@ -194,11 +220,60 @@ export function Contact() {
     { number: 2, title: t('steps.2'), subtitle: t('steps.2sub') },
     { number: 3, title: t('steps.3'), subtitle: t('steps.3sub') },
     { number: 4, title: t('steps.4'), subtitle: t('steps.4sub') },
+    { number: 5, title: t('steps.5'), subtitle: t('steps.5sub') },
+  ];
+
+  const weekDays = useMemo(() => ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], []);
+  const morningSlots = ['10:00', '11:00', '12:00', '13:00'];
+  const afternoonSlots = ['14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+
+  const calendarDays = useMemo(() => {
+    const monthStart = startOfMonth(calendarMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart, { weekStartsOn: 0 });
+    const endDate = endOfWeek(monthEnd, { weekStartsOn: 0 });
+    return eachDayOfInterval({ start: startDate, end: endDate });
+  }, [calendarMonth]);
+
+  const today = startOfDay(new Date());
+
+  const countryOptions = [
+    { code: 'CL', flag: '🇨🇱', dial: '+56', name: 'Chile' },
+    { code: 'AR', flag: '🇦🇷', dial: '+54', name: 'Argentina' },
+    { code: 'BO', flag: '🇧🇴', dial: '+591', name: 'Bolivia' },
+    { code: 'BR', flag: '🇧🇷', dial: '+55', name: 'Brasil' },
+    { code: 'CO', flag: '🇨🇴', dial: '+57', name: 'Colombia' },
+    { code: 'CR', flag: '🇨🇷', dial: '+506', name: 'Costa Rica' },
+    { code: 'EC', flag: '🇪🇨', dial: '+593', name: 'Ecuador' },
+    { code: 'ES', flag: '🇪🇸', dial: '+34', name: 'España' },
+    { code: 'GT', flag: '🇬🇹', dial: '+502', name: 'Guatemala' },
+    { code: 'MX', flag: '🇲🇽', dial: '+52', name: 'México' },
+    { code: 'PA', flag: '🇵🇦', dial: '+507', name: 'Panamá' },
+    { code: 'PE', flag: '🇵🇪', dial: '+51', name: 'Perú' },
+    { code: 'PY', flag: '🇵🇾', dial: '+595', name: 'Paraguay' },
+    { code: 'US', flag: '🇺🇸', dial: '+1', name: 'United States' },
+    { code: 'UY', flag: '🇺🇾', dial: '+598', name: 'Uruguay' },
+    { code: 'VE', flag: '🇻🇪', dial: '+58', name: 'Venezuela' },
   ];
 
   const tattooStyles = [
     'Realismo', 'Fine Line', 'Tradicional', 'Blackwork',
-    'Neotradicional', 'Japonés', 'Geométrico', ' lettering', 'Otro'
+    'Neotradicional', 'Japonés', 'Geométrico', 'Lettering', 'Otro'
+  ];
+
+  const bodyPlacements = [
+    { key: 'arm', label: t('placements.arm') },
+    { key: 'forearm', label: t('placements.forearm') },
+    { key: 'back', label: t('placements.back') },
+    { key: 'chest', label: t('placements.chest') },
+    { key: 'leg', label: t('placements.leg') },
+    { key: 'ankle', label: t('placements.ankle') },
+    { key: 'neck', label: t('placements.neck') },
+    { key: 'wrist', label: t('placements.wrist') },
+    { key: 'hand', label: t('placements.hand') },
+    { key: 'ribs', label: t('placements.ribs') },
+    { key: 'hip', label: t('placements.hip') },
+    { key: 'other', label: t('placements.other') },
   ];
 
   return (
@@ -273,22 +348,46 @@ export function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-zinc-300 flex items-center gap-1">
+                    <Label className="text-zinc-300 flex items-center gap-1">
                       {t('form.step1.phone')}
                       <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder={t('form.step1.phonePlaceholder')}
-                      className={cn(
-                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
-                        errors.phone && "border-red-500 focus:border-red-500"
-                      )}
-                    />
-                    {errors.phone && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phone}</p>}
+                    <div className="grid grid-cols-[130px_1fr] gap-3">
+                      <Select
+                        onValueChange={(val) => {
+                          setFormData((prev) => ({ ...prev, phoneCountry: val }));
+                        }}
+                        value={formData.phoneCountry}
+                      >
+                        <SelectTrigger className="bg-zinc-950 border-zinc-800 text-white h-12 px-2">
+                          <SelectValue placeholder="+56" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-950 border-zinc-800 text-white max-h-[280px]">
+                          {countryOptions.map((c) => (
+                            <SelectItem key={c.code} value={c.dial}>
+                              <span className="flex items-center gap-2">
+                                <span>{c.flag}</span>
+                                <span className="text-zinc-400 text-xs">{c.dial}</span>
+                              </span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        type="tel"
+                        value={formData.phoneNumber}
+                        onChange={(e) => {
+                          setFormData((prev) => ({ ...prev, phoneNumber: e.target.value }));
+                          if (errors.phoneNumber) setErrors((prev) => { const n = { ...prev }; delete n.phoneNumber; return n; });
+                        }}
+                        placeholder={t('form.step1.phonePlaceholder')}
+                        className={cn(
+                          "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
+                          errors.phoneNumber && "border-red-500 focus:border-red-500"
+                        )}
+                      />
+                    </div>
+                    {errors.phoneNumber && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phoneNumber}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -436,21 +535,27 @@ export function Contact() {
               >
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <Label htmlFor="placement" className="text-zinc-300 flex items-center gap-1">
+                    <Label className="text-zinc-300 flex items-center gap-1">
                       <MapPin className="w-4 h-4 text-red-500" />
                       {t('form.step3.placement')}
                       <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      id="placement"
+                    <Select
+                      onValueChange={(val) => handleSelectChange('placement', val)}
                       value={formData.placement}
-                      onChange={handleInputChange}
-                      placeholder={t('form.step3.placementPlaceholder')}
-                      className={cn(
-                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
-                        errors.placement && "border-red-500 focus:border-red-500"
-                      )}
-                    />
+                    >
+                      <SelectTrigger className={cn(
+                        "bg-zinc-950 border-zinc-800 text-white h-12",
+                        errors.placement && "border-red-500"
+                      )}>
+                        <SelectValue placeholder={t('form.step3.placementPlaceholder')} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-zinc-950 border-zinc-800 text-white max-h-[280px]">
+                        {bodyPlacements.map((p) => (
+                          <SelectItem key={p.key} value={p.key}>{p.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     {errors.placement && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.placement}</p>}
                   </div>
 
@@ -558,20 +663,153 @@ export function Contact() {
                     {errors.artist && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.artist}</p>}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="schedulePreference" className="text-zinc-300 flex items-center gap-1">
-                      <Clock className="w-4 h-4 text-zinc-400" />
-                      {t('form.step4.schedule')}
-                      <span className="text-zinc-600 text-xs ml-2">({t('form.optional')})</span>
-                    </Label>
-                    <Input
-                      id="schedulePreference"
-                      value={formData.schedulePreference}
-                      onChange={handleInputChange}
-                      placeholder={t('form.step4.schedulePlaceholder')}
-                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12"
-                    />
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 5: Schedule Visual Calendar + Time Slots */}
+            {step === 5 && (
+              <motion.div
+                key="step5"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
+              >
+                <div className="space-y-6">
+                  {/* Calendar Header */}
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-white font-semibold">
+                      {format(calendarMonth, 'MMMM yyyy')}
+                    </h4>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setCalendarMonth((prev) => subMonths(prev, 1))}
+                        className="p-2 rounded-md border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCalendarMonth((prev) => addMonths(prev, 1))}
+                        className="p-2 rounded-md border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Weekday Labels */}
+                  <div className="grid grid-cols-7 gap-1">
+                    {weekDays.map((d) => (
+                      <div key={d} className="text-center text-xs text-zinc-500 font-medium py-1">
+                        {d}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div className="grid grid-cols-7 gap-1">
+                    {calendarDays.map((day) => {
+                      const isCurrentMonth = isSameMonth(day, calendarMonth);
+                      const isSelected = formData.scheduleDate && isSameDay(day, new Date(formData.scheduleDate));
+                      const isPast = isBefore(day, today);
+                      return (
+                        <button
+                          key={day.toISOString()}
+                          type="button"
+                          disabled={isPast}
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              scheduleDate: format(day, 'yyyy-MM-dd'),
+                              scheduleTime: '',
+                            }));
+                          }}
+                          className={cn(
+                            "aspect-square rounded-md text-sm font-medium transition-colors cursor-pointer",
+                            !isCurrentMonth && "text-zinc-700",
+                            isCurrentMonth && !isSelected && !isPast && "text-zinc-300 hover:bg-zinc-900",
+                            isSelected && "bg-red-600 text-white",
+                            isPast && "text-zinc-700 cursor-not-allowed opacity-50"
+                          )}
+                        >
+                          {format(day, 'd')}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Selected Date Display */}
+                  {formData.scheduleDate && (
+                    <div className="flex items-center gap-2 text-sm text-zinc-300">
+                      <CalendarDays className="w-4 h-4 text-red-500" />
+                      <span>{format(new Date(formData.scheduleDate), 'EEEE, d MMMM yyyy')}</span>
+                    </div>
+                  )}
+
+                  {/* Time Slots */}
+                  {formData.scheduleDate && (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      {/* Morning */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+                          <Sun className="w-3 h-3 text-yellow-500" />
+                          {t('schedule.morning')}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {morningSlots.map((slot) => (
+                            <button
+                              key={slot}
+                              type="button"
+                              onClick={() => {
+                                setFormData((prev) => ({ ...prev, scheduleTime: slot }));
+                              }}
+                              className={cn(
+                                "px-4 py-2 rounded-md border text-sm font-medium transition-colors cursor-pointer",
+                                formData.scheduleTime === slot
+                                  ? "border-red-600 bg-red-600/10 text-red-400"
+                                  : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
+                              )}
+                            >
+                              {slot}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Afternoon */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+                          <Moon className="w-3 h-3 text-blue-400" />
+                          {t('schedule.afternoon')}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {afternoonSlots.map((slot) => (
+                            <button
+                              key={slot}
+                              type="button"
+                              onClick={() => {
+                                setFormData((prev) => ({ ...prev, scheduleTime: slot }));
+                              }}
+                              className={cn(
+                                "px-4 py-2 rounded-md border text-sm font-medium transition-colors cursor-pointer",
+                                formData.scheduleTime === slot
+                                  ? "border-red-600 bg-red-600/10 text-red-400"
+                                  : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
+                              )}
+                            >
+                              {slot}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-zinc-600 text-xs">{t('form.step5.hint')}</p>
                 </div>
               </motion.div>
             )}

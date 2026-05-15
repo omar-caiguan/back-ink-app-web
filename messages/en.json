@@ -70,8 +70,10 @@
       "2sub": "Style & color",
       "3": "Specifications",
       "3sub": "Placement & size",
-      "4": "Scheduling",
-      "4sub": "Artist & timing"
+      "4": "Your Artist",
+      "4sub": "Choose an artist",
+      "5": "Schedule",
+      "5sub": "Date & time"
     },
     "form": {
       "next": "Next",
@@ -84,7 +86,7 @@
         "name": "Full Name",
         "namePlaceholder": "Your name",
         "phone": "Mobile Phone",
-        "phonePlaceholder": "+1 234 567 8900",
+        "phonePlaceholder": "234 567 8900",
         "email": "Email Address",
         "emailPlaceholder": "you@email.com",
         "ageConfirm": "I confirm I am over 18 years old"
@@ -104,14 +106,19 @@
         "referencesHint": "You can attach reference photos or send them later via WhatsApp"
       },
       "step4": {
-        "artist": "Artist Preference",
-        "schedule": "Schedule Preference",
-        "schedulePlaceholder": "e.g. Weekends, mornings, etc."
+        "artist": "Artist Preference"
+      },
+      "step5": {
+        "hint": "You can leave it blank and coordinate directly via WhatsApp"
       },
       "preferences": {
         "anyArtist": "Any artist",
         "anyArtistSub": "First available"
       }
+    },
+    "schedule": {
+      "morning": "Morning",
+      "afternoon": "Afternoon"
     },
     "errors": {
       "required": "This field is required",
@@ -127,6 +134,20 @@
       "small": "Small",
       "medium": "Medium",
       "large": "Large"
+    },
+    "placements": {
+      "arm": "Arm",
+      "forearm": "Forearm",
+      "back": "Back",
+      "chest": "Chest",
+      "leg": "Leg",
+      "ankle": "Ankle",
+      "neck": "Neck",
+      "wrist": "Wrist",
+      "hand": "Hand",
+      "ribs": "Ribs",
+      "hip": "Hip",
+      "other": "Other area"
     },
     "anyArtist": "Any artist (first available)",
     "whatsapp": {

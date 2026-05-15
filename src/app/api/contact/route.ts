@@ -12,29 +12,29 @@ export async function POST(request: Request) {
       name,
       email,
       phone,
-      serviceType,
+      tattooStyle,
+      colorType,
       placement,
       size,
       description,
       artist,
-      budget,
-      contactPreference,
+      schedulePreference,
     } = body;
 
-    if (!name || !email || !serviceType) {
+    if (!name || !phone || !tattooStyle || !colorType || !placement || !size || !artist) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    const budgetLabel: Record<string, string> = {
-      low: '$100 - $300',
-      medium: '$300 - $800',
-      high: '$800+',
-      flexible: 'Flexible',
+    const sizeLabel: Record<string, string> = {
+      small: 'Small',
+      medium: 'Medium',
+      large: 'Large',
     };
 
+    const colorLabel = colorType === 'black' ? 'Black / Shading' : 'Full Color';
     const artistLabel = artist === 'any' ? 'First Available' : artist;
 
     const htmlContent = `
@@ -46,18 +46,18 @@ export async function POST(request: Request) {
           <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Client Details</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Name</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${name}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Email</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${email}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Phone</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${phone || 'N/A'}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Contact Via</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: uppercase;">${contactPreference || 'email'}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Phone</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${phone}</td></tr>
+            ${email ? `<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Email</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${email}</td></tr>` : ''}
           </table>
 
           <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Tattoo Details</h2>
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Service</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: capitalize;">${serviceType}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Placement</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${placement || 'N/A'}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Size</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${size || 'N/A'}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Style</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: capitalize;">${tattooStyle}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Color</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${colorLabel}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Placement</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${placement}</td></tr>
+            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Size</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${sizeLabel[size] || size}</td></tr>
             <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Artist</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${artistLabel}</td></tr>
-            <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Budget</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${budgetLabel[budget] || budget || 'N/A'}</td></tr>
+            ${schedulePreference ? `<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Schedule Preference</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${schedulePreference}</td></tr>` : ''}
           </table>
 
           <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Description</h2>
@@ -71,11 +71,13 @@ export async function POST(request: Request) {
       </div>
     `;
 
+    const subjectLine = `New Booking Request from ${name} - ${tattooStyle}`;
+
     let sendResult = await resend.emails.send({
       from: `Black Ink Studio <${FROM_EMAIL}>`,
       to: [CONTACT_EMAIL],
-      replyTo: email,
-      subject: `New Booking Request from ${name} - ${serviceType}`,
+      replyTo: email || undefined,
+      subject: subjectLine,
       html: htmlContent,
     });
 
@@ -84,8 +86,8 @@ export async function POST(request: Request) {
       sendResult = await resend.emails.send({
         from: 'Black Ink Studio <onboarding@resend.dev>',
         to: [CONTACT_EMAIL],
-        replyTo: email,
-        subject: `New Booking Request from ${name} - ${serviceType}`,
+        replyTo: email || undefined,
+        subject: subjectLine,
         html: htmlContent,
       });
     }
@@ -97,43 +99,42 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send confirmation email to the client (fire-and-forget, shouldn't break the flow)
-    try {
-      const clientHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
-          <div style="background: #dc2626; padding: 24px; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">Booking Received - Black Ink</h1>
+    // Send confirmation email to the client if email was provided
+    if (email) {
+      try {
+        const clientHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
+            <div style="background: #dc2626; padding: 24px; text-align: center;">
+              <h1 style="color: white; margin: 0; font-size: 24px;">Booking Received - Black Ink</h1>
+            </div>
+            <div style="padding: 32px; background: #fafafa; border: 1px solid #e5e5e5;">
+              <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Hi ${name},</h2>
+              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                We have received your booking request. Our team will review your details and contact you shortly.
+              </p>
+              <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Style</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: capitalize;">${tattooStyle}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Artist</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${artistLabel}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Size</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${sizeLabel[size] || size}</td></tr>
+              </table>
+              <p style="font-size: 14px; color: #666; margin-top: 24px;">
+                If you have any questions, feel free to reply to this email or contact us directly.
+              </p>
+            </div>
+            <div style="background: #1a1a1a; padding: 16px; text-align: center; color: #999; font-size: 12px;">
+              <p style="margin: 0;">Black Ink Tattoo Studio</p>
+            </div>
           </div>
-          <div style="padding: 32px; background: #fafafa; border: 1px solid #e5e5e5;">
-            <h2 style="color: #dc2626; font-size: 18px; margin-bottom: 20px;">Hi ${name},</h2>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
-              We have received your booking request. Our team will review your details and contact you shortly.
-            </p>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
-              Here's a quick summary of what you sent:
-            </p>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 140px; color: #666;">Service</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600; text-transform: capitalize;">${serviceType}</td></tr>
-              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Artist</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${artistLabel}</td></tr>
-              <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Budget</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 600;">${budgetLabel[budget] || budget || 'N/A'}</td></tr>
-            </table>
-            <p style="font-size: 14px; color: #666; margin-top: 24px;">
-              If you have any questions, feel free to reply to this email or contact us directly.
-            </p>
-          </div>
-          <div style="background: #1a1a1a; padding: 16px; text-align: center; color: #999; font-size: 12px;">
-            <p style="margin: 0;">Black Ink Tattoo Studio</p>
-          </div>
-        </div>
-      `;
-      await resend.emails.send({
-        from: `Black Ink Studio <${FROM_EMAIL}>`,
-        to: [email],
-        subject: `Booking Confirmation - Black Ink Studio`,
-        html: clientHtml,
-      });
-    } catch {
-      // Ignore client confirmation errors silently
+        `;
+        await resend.emails.send({
+          from: `Black Ink Studio <${FROM_EMAIL}>`,
+          to: [email],
+          subject: `Booking Confirmation - Black Ink Studio`,
+          html: clientHtml,
+        });
+      } catch {
+        // Ignore client confirmation errors silently
+      }
     }
 
     return NextResponse.json({ success: true, id: sendResult.data?.id });

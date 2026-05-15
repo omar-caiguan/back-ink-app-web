@@ -70,8 +70,10 @@
       "2sub": "Estilo y color",
       "3": "Especificaciones",
       "3sub": "Ubicación y tamaño",
-      "4": "Agenda",
-      "4sub": "Artista y horario"
+      "4": "Tu Artista",
+      "4sub": "Elige un artista",
+      "5": "Agenda",
+      "5sub": "Fecha y hora"
     },
     "form": {
       "next": "Siguiente",
@@ -84,7 +86,7 @@
         "name": "Nombre Completo",
         "namePlaceholder": "Tu nombre",
         "phone": "Teléfono Móvil",
-        "phonePlaceholder": "+56 9 0000 0000",
+        "phonePlaceholder": "9 0000 0000",
         "email": "Correo Electrónico",
         "emailPlaceholder": "tu@email.com",
         "ageConfirm": "Confirmo que soy mayor de 18 años"
@@ -104,14 +106,19 @@
         "referencesHint": "Puedes adjuntar fotos de referencia o enviarlas luego por WhatsApp"
       },
       "step4": {
-        "artist": "Preferencia de Artista",
-        "schedule": "Preferencia de Agenda",
-        "schedulePlaceholder": "Ej: Fines de semana, mañanas, etc."
+        "artist": "Preferencia de Artista"
+      },
+      "step5": {
+        "hint": "Puedes dejarlo en blanco y coordinar directamente por WhatsApp"
       },
       "preferences": {
         "anyArtist": "Cualquier artista",
         "anyArtistSub": "Primer disponible"
       }
+    },
+    "schedule": {
+      "morning": "Mañana",
+      "afternoon": "Tarde"
     },
     "errors": {
       "required": "Este campo es obligatorio",
@@ -127,6 +134,20 @@
       "small": "Pequeño",
       "medium": "Mediano",
       "large": "Grande"
+    },
+    "placements": {
+      "arm": "Brazo",
+      "forearm": "Antebrazo",
+      "back": "Espalda",
+      "chest": "Pecho",
+      "leg": "Pierna",
+      "ankle": "Tobillo",
+      "neck": "Cuello",
+      "wrist": "Muñeca",
+      "hand": "Mano",
+      "ribs": "Costillas",
+      "hip": "Cadera",
+      "other": "Otra zona"
     },
     "anyArtist": "Cualquier artista (primer disponible)",
     "whatsapp": {
