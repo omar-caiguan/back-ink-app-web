@@ -30,7 +30,9 @@ import {
   subMonths,
   isBefore,
   startOfDay,
+  addDays,
 } from 'date-fns';
+import { es as esLocale, pt as ptLocale, enUS } from 'date-fns/locale';
 import {
   Check,
   ChevronRight,
@@ -54,6 +56,7 @@ import {
 export function Contact() {
   const t = useTranslations('Contact');
   const locale = useLocale();
+  const dfnsLocale = locale === 'es' ? esLocale : locale === 'pt' ? ptLocale : enUS;
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -253,7 +256,10 @@ export function Contact() {
     { number: 5, title: t('steps.5'), subtitle: t('steps.5sub') },
   ];
 
-  const weekDays = useMemo(() => ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], []);
+  const weekDays = useMemo(() => {
+    const start = startOfWeek(new Date(), { weekStartsOn: 0 });
+    return Array.from({ length: 7 }, (_, i) => format(addDays(start, i), 'EEE', { locale: dfnsLocale }));
+  }, [dfnsLocale]);
   const morningSlots = ['10:00', '11:00', '12:00', '13:00'];
   const afternoonSlots = ['14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
@@ -734,7 +740,7 @@ export function Contact() {
                       {/* Calendar Header */}
                       <div className="flex items-center justify-between">
                         <h4 className="text-white font-semibold text-xs">
-                          {format(calendarMonth, 'MMMM yyyy')}
+                          {format(calendarMonth, 'MMMM yyyy', { locale: dfnsLocale })}
                         </h4>
                         <div className="flex gap-1">
                           <button
@@ -799,7 +805,7 @@ export function Contact() {
                       {formData.scheduleDate && (
                         <div className="flex items-center gap-1.5 text-[11px] text-zinc-300 pt-1">
                           <CalendarDays className="w-3 h-3 text-red-500" />
-                          <span>{format(new Date(formData.scheduleDate), 'EEEE, d MMM')}</span>
+                          <span>{format(new Date(formData.scheduleDate), 'EEEE, d MMM', { locale: dfnsLocale })}</span>
                         </div>
                       )}
                     </div>
@@ -866,7 +872,7 @@ export function Contact() {
                           {formData.scheduleTime && (
                             <div className="pt-2 border-t border-zinc-800">
                               <p className="text-xs text-zinc-400">
-                                {t('form.step5.selected')}: <span className="text-red-400 font-medium">{format(new Date(formData.scheduleDate), 'EEEE, d MMM')} — {formData.scheduleTime}</span>
+                                {t('form.step5.selected')}: <span className="text-red-400 font-medium">{format(new Date(formData.scheduleDate), 'EEEE, d MMM', { locale: dfnsLocale })} — {formData.scheduleTime}</span>
                               </p>
                             </div>
                           )}
