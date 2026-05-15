@@ -18,7 +18,7 @@ export function Location() {
       <div className="container mx-auto px-4 py-16 lg:py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 items-stretch">
           <div className="space-y-6 bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.8)] backdrop-blur">
-            <div className="inline-flex items-center gap-2 rounded-full bg-red-600/10 text-red-300 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-red-700/10 text-red-700 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em]">
               <MapPin className="h-4 w-4" />
               {t('visitUs')}
             </div>
@@ -39,7 +39,7 @@ export function Location() {
                 href="https://www.instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-500 hover:text-white transition"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-700 hover:text-white transition"
               >
                 <Instagram className="h-4 w-4" /> Instagram
               </a>
@@ -47,7 +47,7 @@ export function Location() {
                 href="https://www.facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-500 hover:text-white transition"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-700 hover:text-white transition"
               >
                 <Facebook className="h-4 w-4" /> Facebook
               </a>
@@ -55,7 +55,7 @@ export function Location() {
                 href="https://wa.me/56930579869"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-500 hover:text-white transition"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 hover:border-red-700 hover:text-white transition"
               >
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </a>
@@ -75,7 +75,7 @@ export function Location() {
           </div>
 
           <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_25px_80px_-40px_rgba(0,0,0,0.8)]">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-black/50 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-red-700/10 via-transparent to-black/50 pointer-events-none" />
             <iframe
               title={t('mapTitle')}
               src={MAP_SRC}
@@ -88,7 +88,7 @@ export function Location() {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.45)_100%)]" />
             <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-black/70 backdrop-blur rounded-xl border border-white/10 px-4 py-3 text-sm text-white">
               <div className="flex items-center gap-3">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-600 text-white font-semibold">BI</span>
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-700 text-white font-semibold">BI</span>
                 <div>
                   <p className="font-semibold">{t('visitOurStudio')}</p>
                   <p className="text-xs text-zinc-300">{t('santiagoChile')}</p>
@@ -98,7 +98,7 @@ export function Location() {
                 href="https://maps.google.com?q=Santiago"
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-semibold text-red-300 hover:text-white transition"
+                className="text-xs font-semibold text-red-700 hover:text-white transition"
               >
                 {t('viewMap')}
               </a>
@@ -120,7 +120,7 @@ type InfoRowProps = {
 function InfoRow({ icon, label, value, href }: InfoRowProps) {
   const content = (
     <div className="flex items-start gap-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2">
-      <div className="mt-0.5 text-red-300">{icon}</div>
+      <div className="mt-0.5 text-red-700">{icon}</div>
       <div className="space-y-0.5">
         <p className="text-xs uppercase tracking-[0.08em] text-zinc-400">{label}</p>
         <p className="text-sm text-white">{value}</p>
@@ -130,7 +130,7 @@ function InfoRow({ icon, label, value, href }: InfoRowProps) {
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noreferrer" className="block hover:border-red-500/60 hover:bg-red-600/5 transition">
+      <a href={href} target="_blank" rel="noreferrer" className="block hover:border-red-700/60 hover:bg-red-700/5 transition">
         {content}
       </a>
     );

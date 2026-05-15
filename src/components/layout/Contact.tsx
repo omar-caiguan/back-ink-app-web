@@ -333,14 +333,14 @@ export function Contact() {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
+          <h2 className="text-red-700 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
           <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
         </motion.div>
 
         {/* Step Counter Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-bold text-red-600 font-heading">{step}</span>
+            <span className="text-4xl font-bold text-red-700 font-heading">{step}</span>
             <span className="text-xl text-zinc-500 font-heading">/ {totalSteps}</span>
           </div>
           <div className="text-right">
@@ -352,7 +352,7 @@ export function Contact() {
         {/* Progress Bar */}
         <div className="w-full h-1 bg-zinc-800 rounded-full mb-10 overflow-hidden">
           <motion.div
-            className="h-full bg-red-600"
+            className="h-full bg-red-700"
             initial={false}
             animate={{ width: `${(step / totalSteps) * 100}%` }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
@@ -375,7 +375,7 @@ export function Contact() {
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-zinc-300 flex items-center gap-1">
                       {t('form.step1.name')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <Input
                       id="name"
@@ -383,17 +383,17 @@ export function Contact() {
                       onChange={handleInputChange}
                       placeholder={t('form.step1.namePlaceholder')}
                       className={cn(
-                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
-                        errors.name && "border-red-500 focus:border-red-500"
+                        "bg-zinc-950 border-zinc-800 text-white focus:border-red-700 h-12",
+                        errors.name && "border-red-700 focus:border-red-700"
                       )}
                     />
-                    {errors.name && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
+                    {errors.name && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
                       {t('form.step1.phone')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <div className="grid grid-cols-[130px_1fr] gap-3">
                       <Select
@@ -425,12 +425,12 @@ export function Contact() {
                         }}
                         placeholder={t('form.step1.phonePlaceholder')}
                         className={cn(
-                          "bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12",
-                          errors.phoneNumber && "border-red-500 focus:border-red-500"
+                          "bg-zinc-950 border-zinc-800 text-white focus:border-red-700 h-12",
+                          errors.phoneNumber && "border-red-700 focus:border-red-700"
                         )}
                       />
                     </div>
-                    {errors.phoneNumber && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phoneNumber}</p>}
+                    {errors.phoneNumber && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phoneNumber}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -444,7 +444,7 @@ export function Contact() {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder={t('form.step1.emailPlaceholder')}
-                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12"
+                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-700 h-12"
                     />
                   </div>
 
@@ -455,16 +455,16 @@ export function Contact() {
                       checked={formData.ageConfirmed}
                       onChange={(e) => handleCheckboxChange('ageConfirmed', e.target.checked)}
                       className={cn(
-                        "mt-0.5 h-4 w-4 shrink-0 rounded border border-zinc-600 bg-zinc-950 text-red-600 accent-red-600 focus:ring-red-600 cursor-pointer",
-                        errors.ageConfirmed && "border-red-500"
+                        "mt-0.5 h-4 w-4 shrink-0 rounded border border-zinc-600 bg-zinc-950 text-red-700 accent-red-700 focus:ring-red-700 cursor-pointer",
+                        errors.ageConfirmed && "border-red-700"
                       )}
                     />
                     <div className="space-y-1">
                       <Label htmlFor="ageConfirmed" className="text-zinc-300 text-sm cursor-pointer">
                         {t('form.step1.ageConfirm')}
-                        <span className="text-red-500 ml-1">*</span>
+                        <span className="text-red-700 ml-1">*</span>
                       </Label>
-                      {errors.ageConfirmed && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.ageConfirmed}</p>}
+                      {errors.ageConfirmed && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.ageConfirmed}</p>}
                     </div>
                   </div>
                 </div>
@@ -484,9 +484,9 @@ export function Contact() {
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
-                      <PenTool className="w-4 h-4 text-red-500" />
+                      <PenTool className="w-4 h-4 text-red-700" />
                       {t('form.step2.style')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <Select
                       onValueChange={(val) => handleSelectChange('tattooStyle', val)}
@@ -494,7 +494,7 @@ export function Contact() {
                     >
                       <SelectTrigger className={cn(
                         "bg-zinc-950 border-zinc-800 text-white h-12",
-                        errors.tattooStyle && "border-red-500"
+                        errors.tattooStyle && "border-red-700"
                       )}>
                         <SelectValue placeholder={t('form.step2.stylePlaceholder')} />
                       </SelectTrigger>
@@ -504,13 +504,13 @@ export function Contact() {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.tattooStyle && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.tattooStyle}</p>}
+                    {errors.tattooStyle && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.tattooStyle}</p>}
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
                       {t('form.step2.color')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <RadioGroup
                       value={formData.colorType}
@@ -524,7 +524,7 @@ export function Contact() {
                           className={cn(
                             "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
                             formData.colorType === 'black'
-                              ? "border-red-600"
+                              ? "border-red-700"
                               : "border-zinc-800"
                           )}
                         >
@@ -538,7 +538,7 @@ export function Contact() {
                           className={cn(
                             "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
                             formData.colorType === 'color'
-                              ? "border-red-600"
+                              ? "border-red-700"
                               : "border-zinc-800"
                           )}
                         >
@@ -546,7 +546,7 @@ export function Contact() {
                         </Label>
                       </div>
                     </RadioGroup>
-                    {errors.colorType && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.colorType}</p>}
+                    {errors.colorType && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.colorType}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -559,7 +559,7 @@ export function Contact() {
                       value={formData.description}
                       onChange={handleInputChange}
                       placeholder={t('form.step2.descriptionPlaceholder')}
-                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 min-h-[100px]"
+                      className="bg-zinc-950 border-zinc-800 text-white focus:border-red-700 min-h-[100px]"
                     />
                   </div>
                 </div>
@@ -579,9 +579,9 @@ export function Contact() {
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
-                      <MapPin className="w-4 h-4 text-red-500" />
+                      <MapPin className="w-4 h-4 text-red-700" />
                       {t('form.step3.placement')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <Select
                       onValueChange={(val) => handleSelectChange('placement', val)}
@@ -589,7 +589,7 @@ export function Contact() {
                     >
                       <SelectTrigger className={cn(
                         "bg-zinc-950 border-zinc-800 text-white h-12",
-                        errors.placement && "border-red-500"
+                        errors.placement && "border-red-700"
                       )}>
                         <SelectValue placeholder={t('form.step3.placementPlaceholder')} />
                       </SelectTrigger>
@@ -599,14 +599,14 @@ export function Contact() {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.placement && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.placement}</p>}
+                    {errors.placement && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.placement}</p>}
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
-                      <Ruler className="w-4 h-4 text-red-500" />
+                      <Ruler className="w-4 h-4 text-red-700" />
                       {t('form.step3.size')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <RadioGroup
                       value={formData.size}
@@ -625,7 +625,7 @@ export function Contact() {
                             className={cn(
                               "flex flex-col items-center rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
                               formData.size === opt.value
-                                ? "border-red-600"
+                                ? "border-red-700"
                                 : "border-zinc-800"
                             )}
                           >
@@ -634,7 +634,7 @@ export function Contact() {
                         </div>
                       ))}
                     </RadioGroup>
-                    {errors.size && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.size}</p>}
+                    {errors.size && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.size}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -649,7 +649,7 @@ export function Contact() {
                         multiple
                         accept="image/*"
                         onChange={handleFileChange}
-                        className="bg-zinc-950 border-zinc-800 text-white focus:border-red-600 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-red-600 file:text-white file:text-sm hover:file:bg-red-700"
+                        className="bg-zinc-950 border-zinc-800 text-white focus:border-red-700 h-12 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-red-700 file:text-white file:text-sm hover:file:bg-red-800"
                       />
                     </div>
                     <p className="text-zinc-600 text-xs">{t('form.step3.referencesHint')}</p>
@@ -671,9 +671,9 @@ export function Contact() {
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <Label className="text-zinc-300 flex items-center gap-1">
-                      <User className="w-4 h-4 text-red-500" />
+                      <User className="w-4 h-4 text-red-700" />
                       {t('form.step4.artist')}
-                      <span className="text-red-500">*</span>
+                      <span className="text-red-700">*</span>
                     </Label>
                     <RadioGroup
                       value={formData.artist}
@@ -693,7 +693,7 @@ export function Contact() {
                             className={cn(
                               "flex flex-col rounded-md border-2 bg-zinc-950 p-4 hover:bg-zinc-900 cursor-pointer transition-all",
                               formData.artist === opt.value
-                                ? "border-red-600"
+                                ? "border-red-700"
                                 : "border-zinc-800"
                             )}
                           >
@@ -703,7 +703,7 @@ export function Contact() {
                         </div>
                       ))}
                     </RadioGroup>
-                    {errors.artist && <p className="text-red-400 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.artist}</p>}
+                    {errors.artist && <p className="text-red-700 text-xs flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.artist}</p>}
                   </div>
 
                 </div>
@@ -798,7 +798,7 @@ export function Contact() {
                                 "h-7 rounded text-[11px] font-medium transition-colors cursor-pointer flex items-center justify-center",
                                 !isCurrentMonth && "text-zinc-700",
                                 isCurrentMonth && !isSelected && !isPast && "text-zinc-300 hover:bg-zinc-900",
-                                isSelected && "bg-red-600 text-white",
+                                isSelected && "bg-red-700 text-white",
                                 isPast && "text-zinc-700 cursor-not-allowed opacity-50"
                               )}
                             >
@@ -811,7 +811,7 @@ export function Contact() {
                       {/* Selected Date Display */}
                       {formData.scheduleDate && (
                         <div className="flex items-center gap-1.5 text-[11px] text-zinc-300 pt-1">
-                          <CalendarDays className="w-3 h-3 text-red-500" />
+                          <CalendarDays className="w-3 h-3 text-red-700" />
                           <span>{format(new Date(formData.scheduleDate), 'EEEE, d MMM', { locale: dfnsLocale })}</span>
                         </div>
                       )}
@@ -838,7 +838,7 @@ export function Contact() {
                                   className={cn(
                                     "px-3 py-1.5 rounded border text-xs font-medium transition-colors cursor-pointer",
                                     formData.scheduleTime === slot
-                                      ? "border-red-600 bg-red-600/10 text-red-400"
+                                      ? "border-red-700 bg-red-700/10 text-red-700"
                                       : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
                                   )}
                                 >
@@ -865,7 +865,7 @@ export function Contact() {
                                   className={cn(
                                     "px-3 py-1.5 rounded border text-xs font-medium transition-colors cursor-pointer",
                                     formData.scheduleTime === slot
-                                      ? "border-red-600 bg-red-600/10 text-red-400"
+                                      ? "border-red-700 bg-red-700/10 text-red-700"
                                       : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
                                   )}
                                 >
@@ -879,7 +879,7 @@ export function Contact() {
                           {formData.scheduleTime && (
                             <div className="pt-2 border-t border-zinc-800">
                               <p className="text-xs text-zinc-400">
-                                {t('form.step5.selected')}: <span className="text-red-400 font-medium">{format(new Date(formData.scheduleDate), 'EEEE, d MMM', { locale: dfnsLocale })} — {formData.scheduleTime}</span>
+                                {t('form.step5.selected')}: <span className="text-red-700 font-medium">{format(new Date(formData.scheduleDate), 'EEEE, d MMM', { locale: dfnsLocale })} — {formData.scheduleTime}</span>
                               </p>
                             </div>
                           )}
@@ -910,7 +910,7 @@ export function Contact() {
                 variant="outline"
                 onClick={prevStep}
                 disabled={step === 1}
-                className="border-zinc-700 text-white hover:bg-zinc-800 disabled:opacity-50"
+                className="border-zinc-700 bg-zinc-900/50 text-zinc-300 hover:border-red-700 hover:text-white disabled:opacity-30 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 {t('form.back')}
@@ -921,7 +921,7 @@ export function Contact() {
               <Button
                 onClick={resetForm}
                 variant="outline"
-                className="border-zinc-700 text-white hover:bg-zinc-800"
+                className="border-zinc-700 bg-zinc-900/50 text-zinc-300 hover:border-red-700 hover:text-white cursor-pointer"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 {t('success.newRequest')}
@@ -929,7 +929,7 @@ export function Contact() {
             ) : step < totalSteps ? (
               <Button
                 onClick={nextStep}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-red-700 hover:bg-red-800 text-white cursor-pointer"
               >
                 {t('form.next')}
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -947,14 +947,14 @@ export function Contact() {
                 <Button
                   onClick={() => handleSubmit(false)}
                   variant="outline"
-                  className="border-zinc-700 text-white hover:bg-zinc-800"
+                  className="border-red-700 text-red-700 hover:bg-red-700 hover:text-white cursor-pointer"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   {t('form.submitOnly')}
                 </Button>
                 <Button
                   onClick={() => handleSubmit(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="bg-red-700 hover:bg-red-800 text-white cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   {t('form.submitAndWhatsApp')}

@@ -29,6 +29,11 @@ export function Navigation() {
     setIsOpen(false);
   };
 
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
+  };
+
   return (
     <header className="fixed top-0 w-full z-50 bg-black/85 backdrop-blur-lg border-b border-white/10">
       <div className="container mx-auto px-4 h-24 md:h-28 flex items-center justify-between">
@@ -45,7 +50,7 @@ export function Navigation() {
             priority
           />
           <span className="hidden lg:inline">
-            Black<span className="text-red-600">Ink</span>
+            Black<span className="text-red-700">Ink</span>
           </span>
         </button>
 
@@ -57,8 +62,8 @@ export function Navigation() {
                 key={link.href}
                 onClick={scrollToTop}
                 className={cn(
-                  "text-sm font-medium tracking-wide transition-colors hover:text-red-500 cursor-pointer",
-                  pathname === link.href ? "text-red-500" : "text-zinc-400"
+                  "text-sm font-medium tracking-wide transition-colors hover:text-red-700 cursor-pointer",
+                  pathname === link.href ? "text-red-700" : "text-zinc-400"
                 )}
               >
                 {link.label}
@@ -68,8 +73,8 @@ export function Navigation() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium tracking-wide transition-colors hover:text-red-500",
-                  pathname === link.href ? "text-red-500" : "text-zinc-400"
+                  "text-sm font-medium tracking-wide transition-colors hover:text-red-700",
+                  pathname === link.href ? "text-red-700" : "text-zinc-400"
                 )}
               >
                 {link.label}
@@ -78,7 +83,11 @@ export function Navigation() {
           )}
           <div className="h-6 w-px bg-white/20 mx-2" />
           <LanguageSwitcher />
-          <Button variant="default" className="bg-red-600 hover:bg-red-700 text-white font-medium rounded-md px-6 ml-4">
+          <Button
+            variant="default"
+            className="bg-red-700 hover:bg-red-800 text-white font-medium rounded-md px-6 ml-4 cursor-pointer"
+            onClick={scrollToContact}
+          >
             {t('booking')}
           </Button>
         </nav>
@@ -110,7 +119,7 @@ export function Navigation() {
                   <button
                     key={link.href}
                     onClick={scrollToTop}
-                    className="text-lg font-medium text-zinc-400 hover:text-red-500 text-left cursor-pointer"
+                    className="text-lg font-medium text-zinc-400 hover:text-red-700 text-left cursor-pointer"
                   >
                     {link.label}
                   </button>
@@ -119,13 +128,16 @@ export function Navigation() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-lg font-medium text-zinc-400 hover:text-red-500"
+                    className="text-lg font-medium text-zinc-400 hover:text-red-700"
                   >
                     {link.label}
                   </Link>
                 )
               )}
-              <Button className="w-full bg-red-600 hover:bg-red-700 text-white rounded-md mt-4">
+              <Button
+                className="w-full bg-red-700 hover:bg-red-800 text-white rounded-md mt-4 cursor-pointer"
+                onClick={scrollToContact}
+              >
                 {t('booking')}
               </Button>
             </nav>

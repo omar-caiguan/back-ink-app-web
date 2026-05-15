@@ -53,7 +53,7 @@ export function CarouselPrevious({ className, ...props }: CarouselNavigationProp
   return (
     <button
       className={cn(
-        'absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-red-600',
+        'absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-red-700',
         className
       )}
       {...props}
@@ -67,7 +67,7 @@ export function CarouselNext({ className, ...props }: CarouselNavigationProps) {
   return (
     <button
       className={cn(
-        'absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-red-600',
+        'absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-red-700',
         className
       )}
       {...props}

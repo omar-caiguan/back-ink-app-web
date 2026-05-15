@@ -37,7 +37,7 @@ export function Portfolio() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
+          <h2 className="text-red-700 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
           <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
         </motion.div>
 
@@ -71,8 +71,8 @@ export function Portfolio() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="bg-black/50 border-white/20 text-white hover:bg-red-600 hover:border-red-600" />
-          <CarouselNext className="bg-black/50 border-white/20 text-white hover:bg-red-600 hover:border-red-600" />
+          <CarouselPrevious className="bg-black/50 border-white/20 text-white hover:bg-red-700 hover:border-red-700" />
+          <CarouselNext className="bg-black/50 border-white/20 text-white hover:bg-red-700 hover:border-red-700" />
         </Carousel>
       </div>
     </section>

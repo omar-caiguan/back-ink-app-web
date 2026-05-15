@@ -32,7 +32,7 @@ export function Hero() {
           </h2>
           
           <h1 className="text-5xl md:text-7xl lg:text-9xl font-heading font-bold text-white uppercase tracking-tighter" style={{ textShadow: '0 0 80px rgba(0,0,0,1), 0 0 35px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.9)' }}>
-            {t('mainTitle')}<span className="text-red-600">{t('mainTitleSuffix')}</span>
+            {t('mainTitle')}<span className="text-red-700">{t('mainTitleSuffix')}</span>
           </h1>
 
           <p className="max-w-xl mx-auto text-zinc-100 text-lg md:text-xl font-light" style={{ textShadow: '0 0 50px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.9)' }}>
@@ -45,10 +45,19 @@ export function Hero() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="pt-8 flex flex-col md:flex-row gap-4 justify-center"
           >
-            <Button size="lg" className="bg-red-700 hover:bg-red-800 text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50">
+            <Button
+              size="lg"
+              className="bg-red-700 hover:bg-red-800 text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50 cursor-pointer"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               {t('ctaBooking')}
             </Button>
-            <Button size="lg" variant="outline" className="border-white/40 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-red-700 bg-transparent hover:bg-red-700 hover:text-white text-red-700 min-w-[200px] text-lg font-heading tracking-wide shadow-lg shadow-black/50 cursor-pointer"
+              onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               {t('ctaGallery')}
             </Button>
           </motion.div>
@@ -63,7 +72,7 @@ export function Hero() {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-xs uppercase tracking-widest text-zinc-400" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>{t('scroll')}</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-red-600 to-transparent" />
+        <div className="w-[1px] h-12 bg-gradient-to-b from-red-700 to-transparent" />
       </motion.div>
     </section>
   );

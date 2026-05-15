@@ -37,14 +37,14 @@ export function FAQ() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-           <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">Common Questions</h2>
+           <h2 className="text-red-700 font-medium tracking-widest uppercase text-sm mb-4">Common Questions</h2>
            <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">FAQ</h3>
         </motion.div>
 
         <Accordion type="single" collapsible className="w-full space-y-4">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-b border-zinc-800">
-              <AccordionTrigger className="text-white hover:text-red-500 hover:no-underline text-lg font-medium text-left">
+              <AccordionTrigger className="text-white hover:text-red-700 hover:no-underline text-lg font-medium text-left">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-zinc-400 leading-relaxed">

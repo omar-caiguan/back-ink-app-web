@@ -91,7 +91,7 @@ const i18n: Record<string, any> = {
 
 function buildHeaderHtml(logoUrl: string) {
   return `
-    <div style="background: #09090b; padding: 28px 24px; text-align: center; border-bottom: 3px solid #dc2626;">
+    <div style="background: #09090b; padding: 28px 24px; text-align: center; border-bottom: 3px solid #b91c1c;">
       <img src="${logoUrl}" alt="Black Ink Tattoo Studio" style="height: 48px; width: auto; display: block; margin: 0 auto; border: 0; outline: none;" />
       <p style="margin: 8px 0 0; color: #a1a1aa; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; font-family: Arial, sans-serif;">Tattoo Studio</p>
     </div>
@@ -111,7 +111,7 @@ function buildRow(label: string, value: string) {
 }
 
 function buildSectionTitle(title: string) {
-  return `<h2 style="color: #dc2626; font-size: 14px; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 2px; font-family: Arial, sans-serif; font-weight: 700;">${title}</h2>`;
+  return `<h2 style="color: #b91c1c; font-size: 14px; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 2px; font-family: Arial, sans-serif; font-weight: 700;">${title}</h2>`;
 }
 
 export async function POST(request: Request) {
@@ -233,7 +233,7 @@ export async function POST(request: Request) {
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #e4e4e7; background: #18181b; border-radius: 8px; overflow: hidden; border: 1px solid #27272a;">
             ${buildHeaderHtml(logoUrl)}
             <div style="padding: 28px;">
-              <h2 style="color: #dc2626; font-size: 16px; margin-bottom: 16px; font-family: Arial, sans-serif; font-weight: 700;">${tr.clientGreeting(name)}</h2>
+              <h2 style="color: #b91c1c; font-size: 16px; margin-bottom: 16px; font-family: Arial, sans-serif; font-weight: 700;">${tr.clientGreeting(name)}</h2>
               <p style="font-size: 14px; line-height: 1.6; margin-bottom: 20px; color: #d4d4d8; font-family: Arial, sans-serif;">
                 ${tr.clientBody}
               </p>

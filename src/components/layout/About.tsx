@@ -195,7 +195,7 @@ function PortfolioModal({
                   onClick={() => setCurrentIndex(idx)}
                   className={`relative w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
                     idx === currentIndex
-                      ? 'border-red-600'
+                      ? 'border-red-700'
                       : 'border-transparent hover:border-white/30'
                   }`}
                 >
@@ -241,7 +241,7 @@ export function About() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 space-y-4"
         >
-          <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm">{t('title')}</h2>
+          <h2 className="text-red-700 font-medium tracking-widest uppercase text-sm">{t('title')}</h2>
           <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
           <p className="text-zinc-400 max-w-2xl mx-auto">
             {t('description')}
@@ -268,7 +268,7 @@ export function About() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 w-full p-6">
                     <h4 className="text-2xl font-heading font-bold text-white uppercase mb-1">{artist.name}</h4>
-                    <p className="text-red-500 font-medium text-sm tracking-wide">
+                    <p className="text-red-700 font-medium text-sm tracking-wide">
                       {t(`specialties.${artist.specialtyKey}`)}
                     </p>
                   </div>
@@ -276,7 +276,7 @@ export function About() {
 
                 <button
                   onClick={() => openPortfolio(artist)}
-                  className="w-full py-4 bg-zinc-950 text-white font-medium tracking-wide uppercase text-sm border-t border-zinc-800 hover:bg-red-900 hover:border-red-900 transition-colors cursor-pointer"
+                  className="w-full py-4 bg-transparent text-white font-medium tracking-wide uppercase text-sm border-t border-zinc-800 hover:border-red-700 hover:text-red-700 transition-colors cursor-pointer"
                 >
                   {t('viewPortfolio')}
                 </button>

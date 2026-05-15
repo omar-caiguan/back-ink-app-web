@@ -26,16 +26,16 @@ export function Footer() {
                 className="h-12 w-12 object-contain"
               />
               <span>
-                Black<span className="text-red-600">Ink</span>
+                Black<span className="text-red-700">Ink</span>
               </span>
             </Link>
             <p className="text-zinc-500 text-sm leading-relaxed">
               {t('description')}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-zinc-400 hover:text-red-500 transition-colors"><Instagram size={20} /></a>
-              <a href="#" className="text-zinc-400 hover:text-red-500 transition-colors"><Facebook size={20} /></a>
-              <a href="#" className="text-zinc-400 hover:text-red-500 transition-colors"><Twitter size={20} /></a>
+              <a href="#" className="text-zinc-400 hover:text-red-700 transition-colors"><Instagram size={20} /></a>
+              <a href="#" className="text-zinc-400 hover:text-red-700 transition-colors"><Facebook size={20} /></a>
+              <a href="#" className="text-zinc-400 hover:text-red-700 transition-colors"><Twitter size={20} /></a>
             </div>
           </div>
 
@@ -43,10 +43,10 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-white font-heading text-lg tracking-wide">{t('quickLinks')}</h3>
             <ul className="space-y-2">
-              <li><Link href="/about" className="text-zinc-500 hover:text-red-500 text-sm">{tNav('artists')}</Link></li>
-              <li><Link href="/artists" className="text-zinc-500 hover:text-red-500 text-sm">{tNav('services')}</Link></li>
-              <li><Link href="/gallery" className="text-zinc-500 hover:text-red-500 text-sm">{tNav('gallery')}</Link></li>
-              <li><Link href="/faq" className="text-zinc-500 hover:text-red-500 text-sm">FAQ</Link></li>
+              <li><Link href="/about" className="text-zinc-500 hover:text-red-700 text-sm">{tNav('artists')}</Link></li>
+              <li><Link href="/artists" className="text-zinc-500 hover:text-red-700 text-sm">{tNav('services')}</Link></li>
+              <li><Link href="/gallery" className="text-zinc-500 hover:text-red-700 text-sm">{tNav('gallery')}</Link></li>
+              <li><Link href="/faq" className="text-zinc-500 hover:text-red-700 text-sm">FAQ</Link></li>
             </ul>
           </div>
 
@@ -55,15 +55,15 @@ export function Footer() {
             <h3 className="text-white font-heading text-lg tracking-wide">{t('contact')}</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-zinc-500 text-sm">
-                <MapPin size={18} className="text-red-500 shrink-0" />
+                <MapPin size={18} className="text-red-700 shrink-0" />
                 <span>Santiago, Región Metropolitana, Chile</span>
               </li>
               <li className="flex items-center gap-3 text-zinc-500 text-sm">
-                <Phone size={18} className="text-red-500 shrink-0" />
+                <Phone size={18} className="text-red-700 shrink-0" />
                 <span>+56 9 3057 9869</span>
               </li>
               <li className="flex items-center gap-3 text-zinc-500 text-sm">
-                <Mail size={18} className="text-red-500 shrink-0" />
+                <Mail size={18} className="text-red-700 shrink-0" />
                 <span>omar.caiguan@gmail.com</span>
               </li>
             </ul>
@@ -83,7 +83,7 @@ export function Footer() {
               </li>
               <li className="flex justify-between">
                 <span>{t('days.sunday')}</span>
-                <span className="text-red-500">{t('days.closed')}</span>
+                <span className="text-red-700">{t('days.closed')}</span>
               </li>
             </ul>
           </div>

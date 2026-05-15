@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
             onClick={() => handleLanguageChange(lang.code)}
             className="text-zinc-300 focus:text-white focus:bg-zinc-900 cursor-pointer"
           >
-            <span className={cn(locale === lang.code ? "text-red-500 font-bold" : "")}>
+            <span className={cn(locale === lang.code ? "text-red-700 font-bold" : "")}>
               {lang.label}
             </span>
           </DropdownMenuItem>

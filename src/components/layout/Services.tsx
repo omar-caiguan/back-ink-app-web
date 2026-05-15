@@ -19,7 +19,7 @@ export function Services() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-red-600 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
+          <h2 className="text-red-700 font-medium tracking-widest uppercase text-sm mb-4">{t('title')}</h2>
           <h3 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase">{t('heading')}</h3>
         </motion.div>
 
@@ -32,10 +32,10 @@ export function Services() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-red-600/50 transition-colors h-full flex flex-col justify-between">
+              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-red-700/50 transition-colors h-full flex flex-col justify-between">
                 <CardHeader>
                   <h4 className="text-xl font-heading font-bold text-white uppercase">{t(`items.${key}.title`)}</h4>
-                  <p className="text-red-500 font-medium text-lg">{t(`items.${key}.price`)}</p>
+                  <p className="text-red-700 font-medium text-lg">{t(`items.${key}.price`)}</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-zinc-400 text-sm mb-6">{t(`items.${key}.description`)}</p>
@@ -45,7 +45,7 @@ export function Services() {
                       e.preventDefault();
                       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="inline-flex items-center justify-center rounded-md text-sm transition-colors h-10 py-2 px-4 w-full bg-red-950/70 text-white hover:bg-red-600 font-semibold tracking-wide cursor-pointer border border-red-900/40"
+                    className="inline-flex items-center justify-center rounded-md text-sm transition-colors h-10 py-2 px-4 w-full bg-red-700 text-white hover:bg-red-800 font-semibold tracking-wide cursor-pointer"
                   >
                     {t('book')}
                   </a>

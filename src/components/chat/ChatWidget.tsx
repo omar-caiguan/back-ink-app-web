@@ -20,7 +20,7 @@ export function ChatWidget() {
 
           <div className="relative flex items-center justify-between px-4 pt-4 text-white">
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-xl overflow-hidden shadow-lg shadow-red-900/40 ring-2 ring-red-600/50">
+              <div className="h-11 w-11 rounded-xl overflow-hidden shadow-lg shadow-red-900/40 ring-2 ring-red-700/50">
                 <Image src="/icon/blackink.PNG" alt="Black Ink" width={44} height={44} className="h-full w-full object-contain bg-black" />
               </div>
               <div className="leading-tight">
@@ -63,9 +63,9 @@ export function ChatWidget() {
               ].map((label) => (
                 <div
                   key={label}
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/80 flex items-center gap-2 shadow-sm shadow-black/30 hover:border-red-500/60 hover:text-white transition"
+                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-white/80 flex items-center gap-2 shadow-sm shadow-black/30 hover:border-red-700/60 hover:text-white transition"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-red-400" />
+                  <Sparkles className="h-3.5 w-3.5 text-red-700" />
                   <span>{label}</span>
                 </div>
               ))}
@@ -93,7 +93,7 @@ export function ChatWidget() {
         size="icon"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={isOpen ? 'Ocultar asistente' : 'Abrir asistente'}
-        className="pointer-events-auto h-16 w-16 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] ring-4 ring-red-500/30 animate-[pulse_2s_ease-in-out_infinite]"
+        className="pointer-events-auto h-16 w-16 rounded-full bg-red-700 hover:bg-red-800 text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] ring-4 ring-red-700/30 animate-[pulse_2s_ease-in-out_infinite] cursor-pointer"
       >
         <MessageCircle className="h-7 w-7" />
       </Button>
