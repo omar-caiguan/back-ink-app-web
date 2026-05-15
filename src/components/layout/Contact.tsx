@@ -675,43 +675,43 @@ export function Contact() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-6"
+                className="space-y-4"
               >
-                <div className="space-y-6">
+                <div className="space-y-3">
                   {/* Calendar Header */}
                   <div className="flex items-center justify-between">
-                    <h4 className="text-white font-semibold">
+                    <h4 className="text-white font-semibold text-sm">
                       {format(calendarMonth, 'MMMM yyyy')}
                     </h4>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <button
                         type="button"
                         onClick={() => setCalendarMonth((prev) => subMonths(prev, 1))}
-                        className="p-2 rounded-md border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
+                        className="p-1.5 rounded border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-3 h-3" />
                       </button>
                       <button
                         type="button"
                         onClick={() => setCalendarMonth((prev) => addMonths(prev, 1))}
-                        className="p-2 rounded-md border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
+                        className="p-1.5 rounded border border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 transition-colors cursor-pointer"
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
 
                   {/* Weekday Labels */}
-                  <div className="grid grid-cols-7 gap-1">
+                  <div className="grid grid-cols-7 gap-px">
                     {weekDays.map((d) => (
-                      <div key={d} className="text-center text-xs text-zinc-500 font-medium py-1">
+                      <div key={d} className="text-center text-[10px] text-zinc-500 font-medium py-0.5">
                         {d}
                       </div>
                     ))}
                   </div>
 
                   {/* Calendar Grid */}
-                  <div className="grid grid-cols-7 gap-1">
+                  <div className="grid grid-cols-7 gap-px">
                     {calendarDays.map((day) => {
                       const isCurrentMonth = isSameMonth(day, calendarMonth);
                       const isSelected = formData.scheduleDate && isSameDay(day, new Date(formData.scheduleDate));
@@ -729,7 +729,7 @@ export function Contact() {
                             }));
                           }}
                           className={cn(
-                            "aspect-square rounded-md text-sm font-medium transition-colors cursor-pointer",
+                            "h-8 rounded text-xs font-medium transition-colors cursor-pointer flex items-center justify-center",
                             !isCurrentMonth && "text-zinc-700",
                             isCurrentMonth && !isSelected && !isPast && "text-zinc-300 hover:bg-zinc-900",
                             isSelected && "bg-red-600 text-white",
@@ -744,22 +744,22 @@ export function Contact() {
 
                   {/* Selected Date Display */}
                   {formData.scheduleDate && (
-                    <div className="flex items-center gap-2 text-sm text-zinc-300">
-                      <CalendarDays className="w-4 h-4 text-red-500" />
+                    <div className="flex items-center gap-2 text-xs text-zinc-300">
+                      <CalendarDays className="w-3 h-3 text-red-500" />
                       <span>{format(new Date(formData.scheduleDate), 'EEEE, d MMMM yyyy')}</span>
                     </div>
                   )}
 
                   {/* Time Slots */}
                   {formData.scheduleDate && (
-                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
                       {/* Morning */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 uppercase tracking-wider font-medium">
                           <Sun className="w-3 h-3 text-yellow-500" />
                           {t('schedule.morning')}
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5">
                           {morningSlots.map((slot) => (
                             <button
                               key={slot}
@@ -768,7 +768,7 @@ export function Contact() {
                                 setFormData((prev) => ({ ...prev, scheduleTime: slot }));
                               }}
                               className={cn(
-                                "px-4 py-2 rounded-md border text-sm font-medium transition-colors cursor-pointer",
+                                "px-3 py-1.5 rounded border text-xs font-medium transition-colors cursor-pointer",
                                 formData.scheduleTime === slot
                                   ? "border-red-600 bg-red-600/10 text-red-400"
                                   : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
@@ -781,12 +781,12 @@ export function Contact() {
                       </div>
 
                       {/* Afternoon */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 uppercase tracking-wider font-medium">
                           <Moon className="w-3 h-3 text-blue-400" />
                           {t('schedule.afternoon')}
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5">
                           {afternoonSlots.map((slot) => (
                             <button
                               key={slot}
@@ -795,7 +795,7 @@ export function Contact() {
                                 setFormData((prev) => ({ ...prev, scheduleTime: slot }));
                               }}
                               className={cn(
-                                "px-4 py-2 rounded-md border text-sm font-medium transition-colors cursor-pointer",
+                                "px-3 py-1.5 rounded border text-xs font-medium transition-colors cursor-pointer",
                                 formData.scheduleTime === slot
                                   ? "border-red-600 bg-red-600/10 text-red-400"
                                   : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-900"
@@ -809,7 +809,7 @@ export function Contact() {
                     </div>
                   )}
 
-                  <p className="text-zinc-600 text-xs">{t('form.step5.hint')}</p>
+                  <p className="text-zinc-600 text-[10px]">{t('form.step5.hint')}</p>
                 </div>
               </motion.div>
             )}
