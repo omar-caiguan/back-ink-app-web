@@ -161,6 +161,7 @@
     "anyArtist": "Qualquer artista (primeiro disponível)",
     "whatsapp": {
       "title": "Nova Solicitação - Black Ink Studio",
+      "greeting": "Olá, sou {name}. Estou interessado/a em fazer uma tatuagem e gostaria de agendar uma consulta. Estes são os meus dados:",
       "name": "Nome",
       "phone": "Telefone",
       "email": "E-mail",

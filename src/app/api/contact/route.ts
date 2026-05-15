@@ -116,20 +116,19 @@ function buildSectionTitle(title: string) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const {
-      name,
-      email,
-      phone,
-      tattooStyle,
-      colorType,
-      placement,
-      size,
-      description,
-      artist,
-      schedulePreference,
-      locale,
-    } = body;
+    const formData = await request.formData();
+
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string | null;
+    const phone = formData.get('phone') as string;
+    const tattooStyle = formData.get('tattooStyle') as string;
+    const colorType = formData.get('colorType') as string;
+    const placement = formData.get('placement') as string;
+    const size = formData.get('size') as string;
+    const description = formData.get('description') as string | null;
+    const artist = formData.get('artist') as string;
+    const schedulePreference = formData.get('schedulePreference') as string | null;
+    const locale = formData.get('locale') as string;
 
     if (!name || !phone || !tattooStyle || !colorType || !placement || !size || !artist) {
       return NextResponse.json(
@@ -149,6 +148,21 @@ export async function POST(request: Request) {
     const sizeLabelValue = tr.sizeLabel[size] || size;
     const colorLabelValue = tr.colorLabel[colorType] || (colorType === 'black' ? 'Black / Shading' : 'Full Color');
     const artistLabelValue = artist === 'any' ? tr.artistLabel.any : artist;
+
+    // Process reference image attachments
+    const files = formData.getAll('references') as File[];
+    const attachments = await Promise.all(
+      files
+        .filter((f) => f && f.size > 0)
+        .map(async (file) => {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          return {
+            filename: file.name,
+            content: buffer.toString('base64'),
+            contentType: file.type || 'application/octet-stream',
+          };
+        })
+    );
 
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #e4e4e7; background: #18181b; border-radius: 8px; overflow: hidden; border: 1px solid #27272a;">
@@ -175,6 +189,8 @@ export async function POST(request: Request) {
           <div style="background: #09090b; padding: 16px; border-radius: 6px; border: 1px solid #27272a; line-height: 1.6; color: #d4d4d8; font-family: Arial, sans-serif; font-size: 13px;">
             ${description?.replace(/\n/g, '<br/>') || tr.noDescription}
           </div>
+
+          ${attachments.length > 0 ? `<p style="margin-top: 20px; color: #a1a1aa; font-size: 12px; font-family: Arial, sans-serif;">${attachments.length} reference image(s) attached.</p>` : ''}
         </div>
         ${buildFooterHtml(tr.footerNotification)}
       </div>
@@ -188,6 +204,7 @@ export async function POST(request: Request) {
       replyTo: email || undefined,
       subject: subjectLine,
       html: htmlContent,
+      attachments: attachments.length > 0 ? attachments : undefined,
     });
 
     // Fallback to Resend's default domain if the custom domain isn't verified
@@ -198,6 +215,7 @@ export async function POST(request: Request) {
         replyTo: email || undefined,
         subject: subjectLine,
         html: htmlContent,
+        attachments: attachments.length > 0 ? attachments : undefined,
       });
     }
 

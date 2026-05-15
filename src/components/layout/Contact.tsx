@@ -175,12 +175,14 @@ export function Contact() {
       medium: t('sizes.medium'),
       large: t('sizes.large'),
     };
-    const artistLabel = formData.artist === 'any' ? t('anyArtist') : formData.artist;
     const colorLabel = formData.colorType === 'black' ? t('colors.black') : t('colors.color');
+    const artistLabel = formData.artist === 'any' ? t('anyArtist') : formData.artist;
     const scheduleValue = formData.scheduleDate || formData.scheduleTime
       ? `${formData.scheduleDate}${formData.scheduleTime ? ' ' + formData.scheduleTime : ''}`
       : '';
+    const greeting = t('whatsapp.greeting', { name: formData.name });
     const message = encodeURIComponent(
+      `${greeting}\n\n` +
       `*${t('whatsapp.title')}*\n\n` +
       `*${t('whatsapp.name')}:* ${formData.name}\n` +
       `*${t('whatsapp.phone')}:* ${formData.phoneCountry} ${formData.phoneNumber}\n` +
@@ -209,24 +211,29 @@ export function Contact() {
       const scheduleValue = formData.scheduleDate || formData.scheduleTime
         ? `${formData.scheduleDate}${formData.scheduleTime ? ' ' + formData.scheduleTime : ''}`
         : undefined;
-      const payload = {
-        name: formData.name,
-        email: formData.email || undefined,
-        phone: `${formData.phoneCountry} ${formData.phoneNumber}`,
-        tattooStyle: formData.tattooStyle,
-        colorType: formData.colorType,
-        description: formData.description || undefined,
-        placement: formData.placement,
-        size: formData.size,
-        artist: formData.artist,
-        schedulePreference: scheduleValue,
-        locale,
-      };
+
+      const payload = new FormData();
+      payload.append('name', formData.name);
+      if (formData.email) payload.append('email', formData.email);
+      payload.append('phone', `${formData.phoneCountry} ${formData.phoneNumber}`);
+      payload.append('tattooStyle', formData.tattooStyle);
+      payload.append('colorType', formData.colorType);
+      if (formData.description) payload.append('description', formData.description);
+      payload.append('placement', formData.placement);
+      payload.append('size', formData.size);
+      payload.append('artist', formData.artist);
+      if (scheduleValue) payload.append('schedulePreference', scheduleValue);
+      payload.append('locale', locale);
+
+      if (formData.references) {
+        Array.from(formData.references).forEach((file) => {
+          payload.append('references', file);
+        });
+      }
 
       const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       if (!res.ok) {

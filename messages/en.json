@@ -161,6 +161,7 @@
     "anyArtist": "Any artist (first available)",
     "whatsapp": {
       "title": "New Request - Black Ink Studio",
+      "greeting": "Hi, I'm {name}. I'm interested in getting a tattoo and would like to schedule an appointment. Here are my details:",
       "name": "Name",
       "phone": "Phone",
       "email": "Email",
@@ -169,7 +170,7 @@
       "placement": "Placement",
       "size": "Size",
       "artist": "Artist",
-      "schedule": "Schedule preference",
+      "schedule": "Schedule Preference",
       "description": "Description"
     }
   },
